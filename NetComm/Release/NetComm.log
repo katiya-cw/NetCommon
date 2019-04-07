@@ -1,0 +1,7 @@
+﻿  正在生成代码
+  2 of 6815 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  NetComm.vcxproj -> D:\工作\宇脉模式微信支付后台相关\http接口VC++2015和梅州升级后台相关\NetCommV5.3B- (修改协议增加设置参数,1对多路分别结算   ODBC驱动方式 ）\NetCommV5.6B- (增加了判断掉线的线程 ）\Release\NetComm.exe
+  NetComm.vcxproj -> D:\工作\宇脉模式微信支付后台相关\http接口VC++2015和梅州升级后台相关\NetCommV5.3B- (修改协议增加设置参数,1对多路分别结算   ODBC驱动方式 ）\NetCommV5.6B- (增加了判断掉线的线程 ）\Release\NetComm.pdb (Full PDB)

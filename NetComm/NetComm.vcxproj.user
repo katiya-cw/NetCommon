@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ShowAllFiles>true</ShowAllFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <RemoteDebuggerCommand>C:\vc++远程调试\x86\msvsmon.exe</RemoteDebuggerCommand>
+    <RemoteDebuggerWorkingDirectory>C:\zizhusys\MYexeMengHX\</RemoteDebuggerWorkingDirectory>
+    <RemoteDebuggerServerName>115.28.78.161</RemoteDebuggerServerName>
+    <RemoteDebuggerConnection>RemoteWithoutAuthentication</RemoteDebuggerConnection>
+    <RemoteDebuggerSQLDebugging>false</RemoteDebuggerSQLDebugging>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+</Project>

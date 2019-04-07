@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+    <Text Include="..\程序说明.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="NetComm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NetCommDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="httpserver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\my_alloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\my_list.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\mysql.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\mysql_com.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\mysql_time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\mysql_version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mySqlINCHUDE\typelib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\DLL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mur500_old.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\MUR500USB.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\my_alloc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\my_list.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mysql.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mysql_com.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mysql_time.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\mysql_version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\testDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\typelib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test\VspdCTOMySQL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="db\DbOperate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicCenter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MD5\common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MyDefine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LogUtil\easylogging++.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NetComm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NetCommDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Des.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogReg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unzip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpClient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="httpserver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test\testDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test\VspdCTOMySQL.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="db\DbOperate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceEvent.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicCenter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5\common.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LogUtil\easylogging++.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NetComm.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\NetComm.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\NetComm.ico">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="test\MUR500USB.lib" />
+    <Library Include="test\WS2_32.LIB" />
+    <Library Include="test\libmysql.lib" />
+  </ItemGroup>
+</Project>

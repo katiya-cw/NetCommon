@@ -1,0 +1,317 @@
+
+/////////////////线程池修改//////////////////////////////////////////////////////////////////////////////////////////////////
+刘泽波:
+一个是保证日志的多线程安全
+
+刘泽波:
+另外一个是同一个 dtu_id 的任务放到一个线程里面去处理
+
+刘泽波:
+这样就可以避免相同的 dtu_id 在不同的线程里面处理导致异常
+
+V3.4,增加结算确认方式，define ConfirmJS
+
+
+
+
+
+
+整体流程：注意，设备编号编码有2部分组成，下面的表号是1-99的数字，设备ID是这样组成的：设备主ID+表号（表号也称为子ID），比如设备ID是000006701 ，代表的含义是主ID是67，子ID是1.
+
+第一种“当面付”的逻辑如下：
+
+得到扫描二维码信息后判断是哪个设备上的哪种产品，然后通过NetSendMyDataTrue(int DtuID,int money,int delayTime  );（升级后变成NetSendMyDataTrue(int DtuID,unsigned char  nMeter_ID,int money,int delayTime  );（这里把参数delayTime传递“支付金额",单位是分)：
+发送到指定设备
+
+
+大约3秒-20秒以内会收到设备返回的信息（超过30秒收不到信息，即可判断为本次操作超时，停止执行一切动作，回到待机状态）：
+注意：包括本设备所有上传到上位机的信息都是通过下面的回调函数callBack_GetDataFunction（）解析出来的。
+收到当控制码是04时代表的含义是上传是否支付成功：
+68 01 20 04    08     00 00   01       00 00 00    00 06 00    04 46 00    00 32 00   00 00 00   00 00 00   00 00 00     46 14    16
+                   返回0X000001         备用        备用       备用        备用        备用       备用        备用     CRC效验
+                   也就是1,1表示
+                    付款成功，0 
+                    表示付款失败   
+                   
+当收到付款成功的消息后提示付款成功，并且进行记录和存档。
+
+在待机状态，不间断的会收到如下信息（一般很久才上来一个数据，如半小时到几个小时上一次数据）：
+
+
+68 01 20 07   08     00  00 0D      00  08 8B         00   00 06       00  04 46       00 00 32        00  08 8B      00     02    46     00 00 00      46 14    16
+                     刷卡累积    微信投币累积            已用钱数     剩余钱数       价格              水位          报警 使用状态                 备用        CRC效验
+                   0X00000D =13    0X00088B=2187    0X000006=0.06   0X000446=10.94  0X000032=0.50  0X00088B=21.87      
+                    元               元                 元               元           元              米             
+
+这是设备定期上传的状态信息，对这些信息做到存储和报警，由管理员来进行查询和报警处理，设定1个下限或者上限报警值即可。
+
+
+第二种，带注册的会员制充值方式的逻辑如下：
+
+当最终用户使用微信和支付宝时：逻辑和第一种基本一样，不同之处是每次扣除的是客户通过网页注册后预存的费用，而不是每次从银行卡扣。
+
+A,当最终用户刷卡时：上位机会收到如下信息
+
+当控制码是06时代表的含义是上传卡号：
+68 01 20 06   08     00 00   0D       08 8B     00    00 06     00    04 46   00    00 32     00   00 00 00 00 00 00 00 00 00   46 14    16
+                    卡号                                                                                                       CRC效验
+                   =0X00000D088B(10BCD码的卡号）
+B,当最终用户输入手机号消费时：上位机会收到如下信息
+
+当控制码是55时代表的含义是上传手机号：
+68 01 20 55   08     00 00   0D       08 8B     00    00 06     00    04 46   00    00 32     00   00 00 00 00 00 00 00 00 00   46 14    16
+                    卡号                                                                                                       CRC效验
+                   =0X00000D088B0(11BCD码的手机号）  
+
+                   
+
+这条信息包括了该客户注册时用到的手机号，上位机得到该卡号后进行对应下发操作，和上面流程一样使用NetSendMyDataTrue(int DtuID,unsigned char  nMeter_ID,int money,int delayTime  )把该用户的余额发送到指导设备（这里把参数delayTime传递“支付金额",单位是分)，当设备返回支付成功的信号后执行扣除该用户预存值的操作
+
+有个问题你注意，当你收到客户的钱后，可能发送信号给设备没返回（必须有确认收到后才能发相应命令给HTTP后台）的情况（这个超时时间可以设置，默认15秒）
+这时候你要把这个失败的事件记住，通过HTTP发错误码给后台。
+对于会员系统，后台自动完成退款，对于非会员系统是由人工来处理退款。
+
+当用户使用完设备后会按设备上的结算键，这时候设备会立即上传一条信息给上位机，这条信息是：
+
+  当控制码是22时代表结算命令发出，含义是（结算时，设备会把本次消费了多少钱返回给上位机）：
+
+68 01 20 22   08     00 0D 00       00 00  01      00 00  60        04 00  46    00 00  32      00 00 00     00 00 00     00 00 00   46 14    16
+ 表号01            本次消费金额       错误码        备用             备用         备用             备用         备用        备用      CRC效验
+                   0X000D00 =33.28 0X000001=1   0X000060=0.96     0X0446=1094  0X000032=0.50
+                    元                                         
+
+上位机得到这条信息立即返回OK确认帧给设备，确认帧一般如下：
+ 当控制码是23时代表结算命令发出后上位机给的确认帧：
+
+68 01 20 23   08     00 0D 00       00 00  01      00 00  60        04 00  46    00 00  32      00 00 00     00 00 00     00 00 00   46 14    16
+ 表号01             备用           确认识别        备用             备用         备用             备用         备用        备用      CRC效验
+                   0X000D00 =33.28 0X000001=1   0X000060=0.96     0X0446=1094  0X000032=0.50
+                                 1代表处理成功           
+
+
+
+////////////////////////下面是建立连接时用到的函数和操作方法、////////////////////////////////
+
+流程，系统启动先下载服务器上的数据文件调用DownLoadFile，等待下载结束，下载成功结束后继续进行，不成功或连接异常提示是否本地登陆，是登陆本地数据库，只显示当前数据库数据，界面不更新，不登陆本地时，直接结束
+
+下载成功后，将下载的数据库，覆盖本地的数据库，本地登陆验证，成功后调用NetComm连接服务器，连接成功后如果服务器有数据通信会调用CALL_BACK_GET_DATA，返回数据，需要将这数据插入到本地数据库，服务器上的服务器不用管，如果需要添加个机井或村镇或县市，需要调用NetSend，发送标准的SQL语句即可，等待回调CALL_BACK_EXCUTE返回操作是否成功，成功后修改本地的数据库操作
+
+
+
+1 下载数据库文件  
+int pascal DownLoadFile(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DOWNLOAD callBack)
+返回 
+0 连接准备开始下载
+1 本地错误
+2 绑定错误
+3 连接错误
+参数
+pServerIP 服务器地址
+nPort 服务器端口
+strSaveFile 本程序数据文件路径名称
+callBack  下载过程中的回调
+
+
+typedef bool (*CALL_BACK_DOWNLOAD)(int nType,char* pText,int nTextLen);
+回调函数
+参数
+nType 返回的说明类型
+pText 返回的描述
+nTextLen 描述字符串长度
+
+
+
+2 连接服务器，实时获取设备状态
+int pascal NetComm(char* pServerIP,int nPort,CALL_BACK_GET_DATA callGetBack,CALL_BACK_EXCUTE callExcuteBack)
+
+返回 
+0 连接成功
+1 本地错误
+2 绑定错误
+3 连接错误
+
+参数
+pServerIP 服务器地址
+nPort 服务器端口
+callGetBack    实时数据回调
+callExcuteBack 执行命令后回调 修改数据库(插入 更新 删除的回调)
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+.///////////////////////////下面是通讯过程中需要的操作函数////////////////////////////////////////////////////////
+
+
+下面是通讯过程中需要的操作函数：
+发送函数：
+int NetSendMyDataTrue(int DtuID,unsigned char  nMeter_ID,int money,int delayTime  );
+/*
+DtuID 指定要发送的洗车机ID号，
+unsigned char  nMeter_ID   设备分地址号0-255
+money 钱数，单位分，比如100代表1元，钱数为0表示余额不足，洗车机收到后会提示给客户
+delayTime  这里把参数delayTime传递“支付金额",单位是分，设置为0XFFFF表示上位机要采集数据（如水位等参数，可以定时调用，但不要太频繁，几个小时一次为好）
+*/
+举例：
+HINSTANCE hdll; 
+
+MyNetComm exNetComm;
+Nmyfction exNmyfction;
+MYNetSendMyDataTrue exNetSendMyDataTrue;
+
+hdll=LoadLibrary("NetComm.dll ");
+if(hdll!=NULL)
+{
+
+exNetSendMyDataTrue=(MYNetSendMyDataTrue)GetProcAddress(hdll,"NetSendMyDataTrue");
+
+}
+else
+{
+AfxMessageBox("无法加载DLL---NetComm.dll");
+return;
+
+
+}
+UpdateData(true);
+
+//////////发送数据、///////////
+unsigned long ttemp, ttemp1,ttemp2,ttemp3;
+unsigned char ttemp189;int i = 0;
+	   ttemp2=19; ttemp1=5689;ttemp3=1;ttemp189=1;
+
+		   i = exNetSendMyDataTrue(ttemp2,ttemp189,ttemp1,ttemp3);//向设备号为19子地址为1的地址发送56.89元，延时时间为100毫秒	           
+		
+		   if(i==45)//f发送成功
+		   {
+		   }
+
+下位机收到的支付命令：(注意这里的数据表示顺序相反，小位在前，大位在后，其他的是大位在前，小位在后）
+68  01 20 04   08     02 0D 00        30 01 00 00     06 00    04 46 00    00 32 00  00 00 00   00 00 00   00 00 00       46 14     16
+  表号01              客户付款         “支付金额"      备用         备用       备用         备用     备用      备用          CRC效验
+                       0X000D02=      0X00000130=
+                        33.30元         3。04元
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+回调函数：
+bool callBack_GetDataFunction(int nDut_ID,int nMeter_ID,int nType,long tCommn,BYTE* pData,int nDataLen)
+//以下是实时表数据的返回与说明
+/*
+nDut_ID		DTU编号
+nMeter_ID	表编号
+nType		表协议类型 1 2 3  
+tCommn		通信的时间
+pData		实时数据，二进制
+nDataLen	实时数据长度
+
+回调函数得到的实时数据（pData		实时数据，二进制）再通过下面的协议进行分解：
+ 返回数据:
+0x68,表号，数据长度（总包长度），控制码03，通道数量（1-255），各通道的数据，各通道的数据（从第1个开始，每通道三字节，前两个是数据，高位在前，最后一个是报警状态，1报警，0不报警），  CSL，      CSH，16H
+
+
+
+当控制码是06时代表的含义是上传卡号：
+68 01 20 06   08     00 00   0D       08 8B     00    00 06     00    04 46   00    00 32     00   00 00 00 00 00 00 00 00 00   46 14    16
+                    卡号                                                                                                       CRC效验
+                   =0X00000D088B(10BCD码的卡号）
+B,当最终用户输入手机号消费时：上位机会收到如下信息
+
+当控制码是55时代表的含义是上传手机号：
+68 01 20 55   08     00 00   0D       08 8B     00    00 06     00    04 46   00    00 32     00   00 00 00 00 00 00 00 00 00   46 14    16
+                    卡号                                                                                                       CRC效验
+                   =0X00000D088B0(11BCD码的手机号）  
+
+
+
+
+当控制码是04时代表的含义是上传是否支付成功：
+68 01 20 04    08     00 00  01       00 00 00    00 06 00    04 46 00    00 32 00   00 00 00   00 00 00   00 00 00     46 14    16
+ 表号01             返回0X000001         备用        备用       备用        备用        备用       备用        备用     CRC效验
+                   也就是1,1表示
+                    付款成功，0 
+                    表示付款失败   
+      当控制码是07时代表读取到常用参数的含义是：
+
+68 01 20 07   08     00 0D 00       00 00  8B      00 00  60        04 00  46    00 00  32      00 00 00     00 00 00     00 00 00   46 14    16
+ 表号01            通道1流量          水位             温度            湿度         其他（压力）                                    CRC效验
+                   0X000D00 =33.28 0X00008B=1.39  0X000060=0.96     0X0446=1094  0X000032=0.50
+                    立方米            米              度              (RH) %        MPa %        MPa
+
+  当控制码是22时代表结算命令发出，含义是（结算时，设备会把本次消费了多少钱返回给上位机）：
+
+68 01 20 22   08     00 0D 00       00 00  01      00 00  60        04 00  46    00 00  32      00 00 00     00 00 00     00 00 00   46 14    16
+ 表号01            本次消费金额       错误码        备用             备用         备用             备用         备用        备用      CRC效验
+                   0X000D00 =33.28 0X000001=1   0X000060=0.96     0X0446=1094  0X000032=0.50
+                    元                                         
+
+
+
+错误码定义：0为正常掉线错误代码1，设备问题2，其他问题3,缺水问题4，缺泡沫问题5，电池缺电问题6，其他
+
+
+////////////////--------------------------下面的是定位相关的--------------------------------------=---------------------------
+关于采集GPS定位信号的说明：
+1，波特率必须是9600
+2，比如维度是3910.18434,经度是11907.20181,
+当通过上面的04控制字下发0元给设备时，设备在10秒内返回控制码是8的数据包（过10秒就不会上传GPS信息）：
+（注意上面的定位信息3910.18434,11907.20181在某些地方可能需要除以100，也就是左移2位变成39.10.8434,119.0720181）
+68 01 20 08    08     33 39  31 30 2E 31  38 34 33  34 2C 31  31 39 30  37 2E 32  30 31 38  31 2C     00     46 14    16
+ 表号01               ---------------------------------------------------------------------------           CRC效验
+                        这些对应的上面的位置信息是：3910.18434,11907.20181
+   
+
+
+
+举例如下：
+ bool callBack_GetDataFunction(int nDut_ID,int nMeter_ID,int nType,long tCommn,BYTE* pData,int nDataLen)
+//bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, int tCommn, BYTE*  pData, int nDataLen)
+        {unsigned long ttemp, gg,ttemp1,ttemp2;int i ;
+ CString  mm[32];double dtemp;
+    
+
+         int MM,NN;long ee;  
+         myREVflag=1; 
+				mynDut_ID=nDut_ID;mynMeter_ID=nMeter_ID;ee=tCommn;
+                 memcpy(MYbb,pData,32);
+/*
+      mm[i].Format("%d",MYbb[i]);          
+	 AfxMessageBox("是"+mm+"必须"); 
+	*/
+
+
+	 return true;
+        }
+
+
+///////////////////////////////////////////////////////////
+//在调用DLL时，声明的函数时一定要在函数前面加上FAR PASCAL，否则调用是出现突然的错误
+typedef int  (FAR PASCAL   *MyDownLoadFile)(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DOWNLOAD callBack);
+
+//typedef  int  (*MyNetComm)(char* pServerIP,int nPort,CALL_BACK_GET_DATA callGetBack,CALL_BACK_GET_DATA_GPRS callGetBack2,CALL_BACK_EXCUTE callExcuteBack,CALL_BACK_SHUTDOWN callShutdownBack);
+typedef  int  (FAR PASCAL  *MyNetComm)(char*,int ,CALL_BACK_GET_DATA ,CALL_BACK_GET_DATA_GPRS ,CALL_BACK_EXCUTE ,CALL_BACK_SHUTDOWN );
+
+
+typedef   int  (FAR PASCAL *MyNetSend)(char *pData,int nLen);
+
+typedef   int  (FAR PASCAL *Nmyfction)(int data1);
+typedef   int  (FAR PASCAL *MYNetSendMyData)(int DtuID,unsigned char MepID,unsigned char *pData,int nLen);
+typedef   int  (FAR PASCAL *MYNetSendMyDataTrue)(int DtuID,unsigned char  nMeter_ID,int money,int delayTime  );
+typedef int (FAR PASCAL *MYDownLoadFile)(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DOWNLOAD callBack);
+typedef int (FAR PASCAL *MYregMYdevice)(void);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

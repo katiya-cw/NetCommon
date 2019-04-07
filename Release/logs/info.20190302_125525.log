@@ -1,0 +1,13 @@
+2019-03-02 12:55:25.6281,INFO,21272,The program has started.
+2019-03-02 12:55:25.6311,INFO,21272,12:55:25 myTEST  CDbOperate::OpenSql()  start..
+
+2019-03-02 12:55:25.6791,INFO,21272,12:55:25 myTEST  CDbOperate::OpenSql()   end..
+
+2019-03-02 12:55:25.6791,INFO,21272,12:55:25 myTEST  myUpdateSQL()  start..
+
+2019-03-02 12:55:25.6811,INFO,21272,12:55:25 myTEST  myUpdateSQL()   end..
+
+2019-03-02 12:55:25.6821,INFO,21272,output server string : ÕýÔÚ¼àÌý....
+
+2019-03-02 12:55:26.6882,INFO,21272,12:55:26 Connect error 10061  File:NetComm.cpp Line = 267 
+
