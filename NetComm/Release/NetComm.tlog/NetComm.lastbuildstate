@@ -1,2 +1,0 @@
-#TargetFrameworkVersion=v4.0:PlatformToolSet=v140_xp:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
-Release|Win32|D:\工作\宇脉模式微信支付后台相关\http接口VC++2015和梅州升级后台相关\NetCommV5.3B- (修改协议增加设置参数,1对多路分别结算   ODBC驱动方式 ）\NetCommV5.6B- (增加了判断掉线的线程 ）\|
