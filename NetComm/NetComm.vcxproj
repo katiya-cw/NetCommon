@@ -23,6 +23,8 @@
     <RootNamespace>NetComm</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
+    <VcpkgTriplet Condition="'$(Platform)'=='Win32'">x86-windows-static</VcpkgTriplet>
+    <VcpkgTriplet Condition="'$(Platform)'=='x64'">x64-windows-static</VcpkgTriplet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -194,6 +196,8 @@
     <ClInclude Include="DeviceEvent.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="httpserver.h" />
+    <ClInclude Include="Http\EventLoopManager.h" />
+    <ClInclude Include="Http\HttpServer.h" />
     <ClInclude Include="LogicCenter.h" />
     <ClInclude Include="LogUtil\easylogging++.h" />
     <ClInclude Include="MD5\common.h" />
@@ -202,6 +206,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TcpServer\ConnectBase.h" />
+    <ClInclude Include="TcpServer\ConnectManager.h" />
+    <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\MUR500USB.h" />
     <ClInclude Include="test\mur500_old.h" />
@@ -231,6 +238,7 @@
     <ClCompile Include="DialogReg.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="httpserver.cpp" />
+    <ClCompile Include="Http\HttpServer.cpp" />
     <ClCompile Include="LogicCenter.cpp" />
     <ClCompile Include="LogUtil\easylogging++.cpp" />
     <ClCompile Include="MD5\common.cpp" />
@@ -242,6 +250,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TcpServer\ConnectManager.cpp" />
+    <ClCompile Include="TcpServer\MyConnectionA.cpp" />
     <ClCompile Include="test\testDlg.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\NetComm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

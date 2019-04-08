@@ -115,6 +115,21 @@
     <ClInclude Include="LogUtil\easylogging++.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TcpServer\ConnectBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer\ConnectManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpServer\MyConnectionA.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Http\HttpServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Http\EventLoopManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NetComm.cpp">
@@ -160,6 +175,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LogUtil\easylogging++.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer\ConnectManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpServer\MyConnectionA.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Http\HttpServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
