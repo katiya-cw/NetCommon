@@ -8,7 +8,6 @@
 #include "afxdialogex.h"
 #include "resource.h"
 #include "httpserver.h"
-#include "httpclient.h"
 #include "LogicCenter.h"
 #include "DeviceEvent.h"
 #include "MD5/common.h"  
@@ -16,6 +15,7 @@
 #include "../MyDefine.h"
 #include "ThreadPool.h"
 #include "LogUtil/easylogging++.h"
+#include "Http/HttpClientManager.h"
 
 
 #ifdef _DEBUG
@@ -170,9 +170,8 @@ unsigned __stdcall ClientWork(void* data) {
 	CString text((char*)data);
 	delete[] data;
 
-	CHttpClient client;
 	LOG(INFO) << "begin to send request : " << text;
-	CString ret = client.doGet(text);
+	CString ret = CHttpClientManager::getInstance()->request(text);
 	LOG(INFO) << "send request result : " << ret;
 
 	return 0;
@@ -597,9 +596,7 @@ void SendBACKtoPHPserver(CString text)
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	CHttpClient client;
-
-	CString ret = client.doGet(text);
+	CString ret = CHttpClientManager::getInstance()->request(text);
 //	OutputClientString(ret);
 }
 //显示服务器参数
