@@ -94,9 +94,6 @@
     <ClInclude Include="test\typelib.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="test\VspdCTOMySQL.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="db\DbOperate.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -113,21 +110,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="LogUtil\easylogging++.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\ConnectBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\ConnectManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TcpServer\MyConnectionA.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Http\HttpServer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Http\EventLoopManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -150,16 +132,10 @@
     <ClCompile Include="unzip.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="HttpClient.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="httpserver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="test\testDlg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="test\VspdCTOMySQL.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="db\DbOperate.cpp">
@@ -175,15 +151,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LogUtil\easylogging++.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpServer\ConnectManager.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="TcpServer\MyConnectionA.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Http\HttpServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
