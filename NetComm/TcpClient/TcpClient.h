@@ -1,18 +1,19 @@
-#pragram once
+#pragma once
 
+#include "stdafx.h"
 #include <evpp/tcp_client.h>
 #include <evpp/buffer.h>
 #include <evpp/tcp_conn.h>
 #include <evpp/event_loop_thread.h>
 
 // fd, data, size
-typedef std::function<void(int, char*, int)> MessageCallback
+typedef std::function<void(int, const char*, size_t)> MessageCallback;
 
-class CTcpClient : public ServerStatus {
+class CTcpClient : public evpp::ServerStatus {
 	public:
 		CTcpClient(std::string raddr, std::string name):m_raddr(raddr),m_name(name) {
 			m_client.reset(new evpp::TCPClient(m_loopThread.loop(), m_raddr, m_name));
-			status_.store(evpp::kInitialized);
+			status_.store(evpp::ServerStatus::kInitialized);
 		}
 		~CTcpClient();
 

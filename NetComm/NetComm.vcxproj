@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir);C:\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vcpkg\installed\x64-windows-static\lib;C:\Workspace\NetCommon\NetComm\test;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\vcpkg\installed\x64-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -124,6 +124,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -199,6 +200,10 @@
     <ClInclude Include="DeviceEvent.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="httpserver.h" />
+    <ClInclude Include="Http\EventLoopManager.h" />
+    <ClInclude Include="Http\HttpClient.h" />
+    <ClInclude Include="Http\HttpClientManager.h" />
+    <ClInclude Include="Http\HttpServer.h" />
     <ClInclude Include="LogicCenter.h" />
     <ClInclude Include="LogUtil\easylogging++.h" />
     <ClInclude Include="MD5\common.h" />
@@ -207,6 +212,11 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TcpClient\TcpClient.h" />
+    <ClInclude Include="TcpClient\TcpClientInstance.h" />
+    <ClInclude Include="TcpServer\ConnectBase.h" />
+    <ClInclude Include="TcpServer\ConnectManager.h" />
+    <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\MUR500USB.h" />
     <ClInclude Include="test\mur500_old.h" />
@@ -234,6 +244,8 @@
     <ClCompile Include="DeviceEvent.cpp" />
     <ClCompile Include="DialogReg.cpp" />
     <ClCompile Include="httpserver.cpp" />
+    <ClCompile Include="Http\HttpClient.cpp" />
+    <ClCompile Include="Http\HttpServer.cpp" />
     <ClCompile Include="LogicCenter.cpp" />
     <ClCompile Include="LogUtil\easylogging++.cpp" />
     <ClCompile Include="MD5\common.cpp" />
@@ -245,6 +257,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TcpClient\TcpClient.cpp" />
+    <ClCompile Include="TcpServer\ConnectManager.cpp" />
+    <ClCompile Include="TcpServer\MyConnectionA.cpp" />
     <ClCompile Include="test\testDlg.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\NetComm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

@@ -14,7 +14,7 @@
 #include "../MyDefine.h"
 #include "ThreadPool.h"
 #include "LogUtil/easylogging++.h"
-//#include "Http/HttpClientManager.h"
+#include "Http/HttpClientManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -168,7 +168,7 @@ unsigned __stdcall ClientWork(void* data) {
 	CString text((char*)data);
 	delete[] data;
 
-	//CString ret = CHttpClientManager::getInstance()->request(text);
+	std::string ret = CHttpClientManager::getInstance()->request(text.GetBuffer());
 
 	return 0;
 }
@@ -211,7 +211,7 @@ BOOL CNetCommDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 	el::Loggers::configureFromGlobal("log.conf");
 	CString startLog = "The program has started.";
-	LOG(INFO) << startLog;
+	LOG_INFO << startLog;
 
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
@@ -591,7 +591,7 @@ void SendBACKtoPHPserver(CString text)
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	//CString ret = CHttpClientManager::getInstance()->request(text);
+	std::string ret = CHttpClientManager::getInstance()->request(text.GetBuffer());
 //	OutputClientString(ret);
 }
 //显示服务器参数

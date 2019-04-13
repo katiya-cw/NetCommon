@@ -16,7 +16,9 @@ public:
 	}
 
 public:
-	std::string request(std::string url);
+	std::string request(std::string url) {
+		return m_httpClient.request(url);
+	}
 
 private:
 	CHttpClient m_httpClient;

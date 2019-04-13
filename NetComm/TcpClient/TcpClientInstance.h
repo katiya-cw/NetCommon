@@ -1,4 +1,4 @@
-#pragram once
+#pragma once
 
 #include "TcpClient.h"
 
@@ -22,7 +22,7 @@ class CTcpClientInstance {
 		}
 
 		bool stop() {
-			return m_tcpCient->stop();
+			return m_tcpClient->stop();
 		}
 
 		void setMessageCallback(MessageCallback messageCallback) {
