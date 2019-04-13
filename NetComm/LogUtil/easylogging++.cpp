@@ -14,7 +14,7 @@
 //  https://muflihun.github.io/easyloggingpp
 //  http://muflihun.com
 //
-
+#include "stdafx.h"
 #include "easylogging++.h"
 
 #if defined(AUTO_INITIALIZE_EASYLOGGINGPP)

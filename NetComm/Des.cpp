@@ -260,7 +260,7 @@ CString CDES::BinaryToString(char* szSource,int len,bool bType)
                     iCh+=SingleCharToBinary(szTmp8[j]) * pow(2.0,7-j);   
             }   
             char buffer[2] = {0};   
-            itoa(iCh,buffer,16);   
+            _itoa(iCh,buffer,16);   
             //if the integer less than 16,insert a zero to buffer    
             if(iCh < 16)   
             {   

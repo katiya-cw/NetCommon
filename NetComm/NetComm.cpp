@@ -7,7 +7,7 @@
 #include "NetCommDlg.h"
 #include "unzip.h"
 #include "Des.h"
-#include "../../MyDefine.h"
+#include "../MyDefine.h"
 #include "DialogReg.h"
 #include "db/DbOperate.h""
 

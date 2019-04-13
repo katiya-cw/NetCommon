@@ -1,7 +1,6 @@
 
 // NetCommDlg.cpp : 实现文件
 //
-
 #include "stdafx.h"
 #include "NetComm.h"
 #include "NetCommDlg.h"
@@ -15,13 +14,12 @@
 #include "../MyDefine.h"
 #include "ThreadPool.h"
 #include "LogUtil/easylogging++.h"
-#include "Http/HttpClientManager.h"
-
+//#include "Http/HttpClientManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-#include "../db/DbOperate.h""
+#include "db/DbOperate.h""
 
 #ifdef updataOnOffDTU
 #include<thread>
@@ -170,9 +168,7 @@ unsigned __stdcall ClientWork(void* data) {
 	CString text((char*)data);
 	delete[] data;
 
-	LOG(INFO) << "begin to send request : " << text;
-	CString ret = CHttpClientManager::getInstance()->request(text);
-	LOG(INFO) << "send request result : " << ret;
+	//CString ret = CHttpClientManager::getInstance()->request(text);
 
 	return 0;
 }
@@ -538,7 +534,7 @@ void CNetCommDlg::OnBnClickedStart()
 }
 
 //处理消息显示
-HRESULT CNetCommDlg::OnServerInfoMsg(WPARAM wparam, LPARAM lparam)
+LRESULT CNetCommDlg::OnServerInfoMsg(WPARAM wparam, LPARAM lparam)
 {
 	CRichEditCtrl *pE = ((CRichEditCtrl *)GetDlgItem(IDC_RICHEDIT_SERVER));
 	pE->SetSel(0, -1);
@@ -548,7 +544,7 @@ HRESULT CNetCommDlg::OnServerInfoMsg(WPARAM wparam, LPARAM lparam)
 	return NULL;
 }
 //处理消息显示
-HRESULT CNetCommDlg::OnClientInfoMsg(WPARAM wparam, LPARAM lparam)
+LRESULT CNetCommDlg::OnClientInfoMsg(WPARAM wparam, LPARAM lparam)
 {
 	CRichEditCtrl *pE = ((CRichEditCtrl *)GetDlgItem(IDC_RICHEDIT_RET));
 	pE->SetSel(0, -1);
@@ -558,7 +554,7 @@ HRESULT CNetCommDlg::OnClientInfoMsg(WPARAM wparam, LPARAM lparam)
 	return NULL;
 }
 
-HRESULT CNetCommDlg::OnServerURLMsg(WPARAM wparam, LPARAM lparam)
+LRESULT CNetCommDlg::OnServerURLMsg(WPARAM wparam, LPARAM lparam)
 {
 	CString URL = CString((char*)wparam);
 	CRichEditCtrl *pE = ((CRichEditCtrl *)GetDlgItem(IDC_RICHEDIT_URL));
@@ -578,7 +574,6 @@ void CNetCommDlg::OnBnClickedButtonSend()
 
 	text = text + GetClientParam();
 
-	CHttpClient client;
 	CRichEditCtrl *pE = ((CRichEditCtrl *)GetDlgItem(IDC_RICHEDIT_CLIENT));
 	pE->SetSel(0, -1);
 	pE->SetWindowText(pE->GetSelText() + "\n" + CString((char*)text.GetBuffer(0)));
@@ -596,7 +591,7 @@ void SendBACKtoPHPserver(CString text)
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	CString ret = CHttpClientManager::getInstance()->request(text);
+	//CString ret = CHttpClientManager::getInstance()->request(text);
 //	OutputClientString(ret);
 }
 //显示服务器参数

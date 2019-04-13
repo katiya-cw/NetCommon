@@ -6,7 +6,7 @@
 #include "testDlg.h"
 #include "MUR500USB.h"
 #include "DLL.h"
-#include "VspdCTOMySQL.h"
+//#include "VspdCTOMySQL.h"
 //#include "../resource.h"
 #include "../../MyDefine.h"
 
@@ -146,7 +146,6 @@ BEGIN_MESSAGE_MAP(CTestDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON10, OnButton10)
 	ON_BN_CLICKED(IDC_BUTTON11, OnButton11)
 	ON_BN_CLICKED(IDC_BUTTON12, OnButton12)
-	ON_WM_TIMER()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

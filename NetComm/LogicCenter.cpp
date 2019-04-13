@@ -5,7 +5,7 @@
 //引入头文件   
 #include "MD5/common.h"  
 #include "db/DbOperate.h""
-#include "../../MyDefine.h"
+#include "../MyDefine.h"
 
 extern ThreadPool threadPool;
 extern void myOUTerr(unsigned char err);

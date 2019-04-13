@@ -1,9 +1,6 @@
 #include "HttpClient.h"
-#include <evpp/httpc/request.h>
 #include <evpp/httpc/conn.h>
-#include <evpp/httpc/response.h>
 #include <folly/futures/Future.h>
-
 
 CHttpClient::CHttpClient() {
 	m_loop.Start(true);
@@ -13,7 +10,8 @@ CHttpClient::~CHttpClient() {
 	m_loop.Stop(true);
 }
 
-void CHttpClient::HandleHTTPResponse(const std::shared_ptr<evpp::httpc::Response>& response, evpp::httpc::GetRequest* request, folly::Promise<std::string>* resPromise) {
+void CHttpClient::HandleHTTPResponse(const std::shared_ptr<evpp::httpc::Response>& response, 
+	evpp::httpc::GetRequest* request, folly::Promise<std::string>* resPromise) {
 	delete request; // The request MUST BE deleted in EventLoop thread.
 	resPromise->setValue(response->body().ToString());
 }

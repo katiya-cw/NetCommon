@@ -1,5 +1,7 @@
 #pragma once
 
+#include "HttpClient.h"
+
 class CHttpClientManager {
 public:
 	static CHttpClientManager* getInstance() {
@@ -12,5 +14,11 @@ public:
 	  lock.unlock();
 	  return gHttpClient;
 	}
+
+public:
+	std::string request(std::string url);
+
+private:
+	CHttpClient m_httpClient;
 };
 

@@ -36,9 +36,9 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg HRESULT OnServerInfoMsg(WPARAM wparam, LPARAM lparam);
-	afx_msg HRESULT OnClientInfoMsg(WPARAM wparam, LPARAM lparam);
-	afx_msg HRESULT OnServerURLMsg(WPARAM wparam, LPARAM lparam);	
+	afx_msg LRESULT OnServerInfoMsg(WPARAM wparam, LPARAM lparam);
+	afx_msg LRESULT OnClientInfoMsg(WPARAM wparam, LPARAM lparam);
+	afx_msg LRESULT OnServerURLMsg(WPARAM wparam, LPARAM lparam);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnLbnSelchangeListServer();
