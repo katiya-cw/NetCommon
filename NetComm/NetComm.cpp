@@ -73,75 +73,6 @@ BOOL GetModelFromRes(char* strFileName)
 char g_strPIP[32] = {0};
 int g_nPort = 0;
 
-int _ConnectServer(char* ip,int port,SOCKET &s)
-{
-	WORD wVersionRequested;
-	WSADATA wsaData;
-	wVersionRequested = MAKEWORD(1,1);
-	WSAStartup(wVersionRequested, &wsaData);
-	
-	char strError[1024] = {0};
-	sockaddr_in srv;
-	memset(&srv,0,sizeof(srv));
-	srv.sin_addr.S_un.S_addr = inet_addr(ip);
-	srv.sin_family = AF_INET;
-	srv.sin_port = htons(port);
-	
-	s = socket(AF_INET, SOCK_STREAM, 0);
-	if(s <= 0)
-	{
-		int error = GetLastError();
-		sprintf(strError,"socket error %d (%s) File:%s Line = %d ",error,GetSystemError(error),__FILE__,__LINE__);
-		OutputDebug(strError);
-		return 1;
-	}
-	sockaddr_in sin;
-#ifndef WIN32
-	sin.sin_addr.s_addr = INADDR_ANY;
-#else
-	sin.sin_addr.S_un.S_addr = INADDR_ANY;
-#endif
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(0);
-	
-	if (bind(s, (struct sockaddr*)&sin, sizeof(sin)) < 0)
-	{
-		closesocket(s);
-		int error = GetLastError();
-		sprintf(strError,"bind error  %d (%s) File:%s Line = %d ",error,GetSystemError(error),__FILE__,__LINE__);
-		OutputDebug(strError);
-		return 2;
-	}
-	if(connect(s ,(struct sockaddr*)&srv, sizeof(srv)) != 0)
-	{
-		int error = GetLastError();
-		closesocket(s);
-		
-		sprintf(strError,"Connect error %d  File:%s Line = %d ",error,__FILE__,__LINE__);
-		OutputDebug(strError);
-		
-		return 3;
-	}
-	return 0;
-}
-
-
-CTime ____GetBuildDateTime()
-{
-	char s_month[5];
-	int month, day, year;
-	char month_names[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
-	sscanf(__DATE__, "%s %d %d", s_month, &day, &year);
-	month = (strstr(month_names, s_month)-month_names)/3 + 1;
-	
-	int h,m,s;
-	sscanf(__TIME__, "%d:%d:%d",&h,&m,&s);
-	
-	CTime t(year,month,day,h,m,s);
-	
-	return t;
-}
-
 // CNetCommApp
 
 BEGIN_MESSAGE_MAP(CNetCommApp, CWinApp)
@@ -276,75 +207,6 @@ typedef struct _DOWNLOAD_DATA_
 	
 }_DOWNLOAD_DATA_;
 
-char* GetIpByDomain(char* pHost)//域名 转ip地址
-{
-	WORD wVersionRequested;
-	WSADATA wsaData;
-	wVersionRequested = MAKEWORD(1,1);
-	WSAStartup(wVersionRequested, &wsaData);
-	
-    static char ipv4[16] = {0};
-    if (inet_addr(pHost) != INADDR_NONE)
-	{
-		strcpy(ipv4,pHost);
-    }
-	else
-	{
-		hostent* answer = gethostbyname(pHost);
-		if (answer != NULL) 
-		{
-			BYTE ip[4] = {0};
-			memcpy(ip,answer->h_addr_list[0],4);
-			
-			sprintf(ipv4,"%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]);
-		}		
-	}
-	return ipv4;
-}
-
-void CreateMapFile(char* name,char* pKey,int nKeyLen)
-{
-	char str[21][200] = 
-	{
-		"<!DOCTYPE html>\r\n",
-			"<html>\r\n",
-			"<head>\r\n",
-			"<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n",
-			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\r\n",
-			"<meta name=\"viewport\" content=\"initial-scale=1.0, user-scalable=no\" />\r\n",
-			"<style type=\"text/css\">\r\n",
-			"body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}\r\n",
-			"</style>\r\n",
-			"<script type=\"text/javascript\" src=\"http://api.map.baidu.com/api?v=2.0&ak=",//................
-			"\"></script>\r\n",
-			"<script type=\"text/javascript\" src=\"TextIconOverlay.js\"></script>\r\n",
-			"<script type=\"text/javascript\" src=\"MarkerClusterer.js\"></script>\r\n",
-			"<title>map</title>\r\n",
-			"</head>\r\n",
-			"<body>\r\n",
-			"<div id=\"allmap\"></div>\r\n",
-			"<script type=\"text/javascript\" src=\"MapInit.js\"></script>\r\n",
-			"<script type=\"text/javascript\" src=\"MapHelper.js\"></script>\r\n",
-			"</body>\r\n",
-			"</html>\r\n"
-	};
-	
-	CStdioFile file;
-	if(!file.Open(name,CFile::modeWrite|CFile::modeCreate))
-	{
-		return;
-	}
-	strcat(str[9],pKey);
-	
-	for(int i = 0;i < 21;i ++)
-	{
-		file.Write(str[i],strlen(str[i]));
-	}
-	file.Close();
-	
-}
-
-
 UINT ______AFX_DOWN_LOAD(LPVOID pParam)
 {
 	_DOWNLOAD_DATA_* pData = (_DOWNLOAD_DATA_* )pParam;
@@ -352,8 +214,6 @@ UINT ______AFX_DOWN_LOAD(LPVOID pParam)
 	char strMapFile[MAX_PATH] = {0};
 	sprintf(strMapFile,"%s\\js\\map.html",GetCurrentPathName());
 	DeleteFile(strMapFile);
-	// 	CString strPath = GetCurrentPathName();
-	// 	CString strFileName = 
 
 	char name[MAX_PATH] = {0};
 	strcpy(name,pData->name);
@@ -397,7 +257,6 @@ UINT ______AFX_DOWN_LOAD(LPVOID pParam)
 			int ver = 0;
 			memcpy(&nType,&buff[0],4);
 			memcpy(&ver,&buff[4],4);
-
 		}
 		if(nLen == 8)
 		{
@@ -631,12 +490,10 @@ int ___CheckAuth()
 
 					return 1;//授权已经到期
 				}
-				//m_edDay.SetWindowText(strY + "-" + strM + "-" + strD);
 			}
 			
 		}
 	}
-//	AfxMessageBox("注册码错误.");
 	return -1;//无注册码
 }
 
@@ -653,6 +510,7 @@ int pascal regMYdevice(void)
 	}
 	return 1;
 }
+
 int pascal DownLoadFile(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DOWNLOAD callBack)
 {
 	int nAuth = ___CheckAuth();
@@ -919,13 +777,14 @@ Reconnect:
 	::CoUninitialize();//反初始化COM库
 
 	return 0;
-
-	SqlOPP2.CloseSql();
-	::CoUninitialize();//反初始化COM库
 }
 
 
-int pascal NetComm(char* pServerIP,int nPort,CALL_BACK_GET_DATA callGetBack,CALL_BACK_GET_DATA_GPRS callGetBack2,CALL_BACK_EXCUTE callExcuteBack,CALL_BACK_SHUTDOWN callShutdownBack)
+int pascal NetComm(char* pServerIP,int nPort,
+	CALL_BACK_GET_DATA callGetBack,
+	CALL_BACK_GET_DATA_GPRS callGetBack2,
+	CALL_BACK_EXCUTE callExcuteBack,
+	CALL_BACK_SHUTDOWN callShutdownBack)
 {
 	char ip[32] = {0};
 	strcpy(ip,GetIpByDomain(pServerIP));
@@ -945,7 +804,6 @@ int pascal NetComm(char* pServerIP,int nPort,CALL_BACK_GET_DATA callGetBack,CALL
 	}
 
 	g_GetData.callGetBack = callGetBack;
-//	g_GetData.callGetBack2 = callGetBack2;
 	g_GetData.callExcuteBack = callExcuteBack;
 	g_GetData.callShutdownBack = callShutdownBack;
 	g_GetData.callGetBack2 = callGetBack2;
@@ -983,28 +841,9 @@ int pascal NetSendMyData(int DtuID,unsigned char MepID,unsigned char *pData,int 
 	memcpy(&buff[13],pData,nLen);
 	return send(g_GetData.sSocket,buff,nLen + 13,0);
 }
-WORD Caluation_CRC16(BYTE Buff[], int nSize)
-{
-	WORD nOld;
-	WORD nRet = 0xffff;
-	unsigned short i,j;
-	for(i=0; i<nSize; i++)
-	{
-		nRet ^= Buff[i];
-		for(j=0; j<8; j++)
-		{
-			nOld = nRet;
-			nRet >>= 1;
-			if(nOld&0x0001)
-				nRet ^= 0xa001;
-		}
-	}
-	return nRet;
-}
+
 int pascal NetSendMyDataTrue(int DtuID, unsigned char nMeter_ID, int money, int delayTime)
 {
-
-
 	unsigned char buff[32]; unsigned char buff3[4]; unsigned char buff4[4];
 	int i;
 
@@ -1035,7 +874,6 @@ int pascal NetSendMyDataTrue(int DtuID, unsigned char nMeter_ID, int money, int 
 	BYTE bb[2] = { 0 };
 	memcpy(bb, &dddd, 2);
 
-
 	buff[29] = bb[0]; buff[30] = bb[1];
 
 	buff[31] = 0x16;
@@ -1044,10 +882,9 @@ int pascal NetSendMyDataTrue(int DtuID, unsigned char nMeter_ID, int money, int 
 
 	return i;
 }
+
 int pascal NetSendMyDataTrue2(int DtuID, unsigned char nMeter_ID, int money, int delayTime,int CH)
 {
-
-
 	unsigned char buff[32]; unsigned char buff3[4]; unsigned char buff4[4];
 	int i;
 
@@ -1089,10 +926,9 @@ int pascal NetSendMyDataTrue2(int DtuID, unsigned char nMeter_ID, int money, int
 
 	return i;
 }
+
 int pascal NetSendMyDataTrue3(int DtuID, unsigned char nMeter_ID, int money, int delayTime, int CH, int paymoney)
 {
-
-
 	unsigned char buff[32]; unsigned char buff3[4]; unsigned char buff4[4];
 	int i;
 
@@ -1100,7 +936,6 @@ int pascal NetSendMyDataTrue3(int DtuID, unsigned char nMeter_ID, int money, int
 		return -2;
 	//68  01 20 04   08     00 0D 02        00 00 00    00 06 00    04 46 00  
 	//	00 32 00  00 00 00   00 00 00   00 00 00       46 14     16
-
 
 	memcpy(buff3, &money, 4);
 	memcpy(buff4, &delayTime, 4);
@@ -1140,8 +975,6 @@ int pascal NetSendMyDataTrue3(int DtuID, unsigned char nMeter_ID, int money, int
 
 int pascal NetSendMyAccount(int DtuID, unsigned char nMeter_ID, int OKorNO) //对自助设备发送结算确认命令
 {
-
-
 	unsigned char buff[32]; unsigned char buff3[4]; unsigned char buff4[4];
 	int i;
 
@@ -1189,6 +1022,7 @@ int pascal NetSendMyAccount(int DtuID, unsigned char nMeter_ID, int OKorNO) //对
 
 	return i;
 }
+
 int pascal MENGsendDown_Data(int DtuID, unsigned char nMeter_ID, unsigned int* Down_Data, unsigned char ttm)
 {
 	unsigned char buff[32]; unsigned char buff3[4]; unsigned char buff4[4];
@@ -1205,9 +1039,6 @@ int pascal MENGsendDown_Data(int DtuID, unsigned char nMeter_ID, unsigned int* D
 	0X000001=1
 	1代表处理成功
 	*/
-
-
-	//memcpy(buff4, &delayTime, 4);
 
 	memset(buff, 0, 32);
 	if (ttm == 0)
@@ -1262,6 +1093,7 @@ int pascal MENGsendDown_Data(int DtuID, unsigned char nMeter_ID, unsigned int* D
 
 	return i;
 }
+
 int pascal GetQueryData(char *pData,int nLen,char* pRetData,int& nRetLen)
 {
 	return -2;
@@ -1272,6 +1104,7 @@ int pascal RegSystem()
 
 	return 0;
 }
+
 int pascal myfction(int data1)
 {
   return data1+2;
