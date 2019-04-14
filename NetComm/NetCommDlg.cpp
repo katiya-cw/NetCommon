@@ -37,7 +37,6 @@ void updataSQL(int mm)
 	dwRecvTime = t.GetTime();
 	CString csStartTime = t.Format("%Y%m%d%H%M%S"); //生成标准时间格式
 
-													//CString s("2001-8-29 19:06:23");
 	int nYear, nMonth, nDate, nHour, nMin, nSec;
 	::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 	CDbOperate SqlOPP;
@@ -47,7 +46,6 @@ void updataSQL(int mm)
 	map <DWORD, CString>::iterator it;
 	for (it = SqlOPP.devTimeMap.begin(); it != SqlOPP.devTimeMap.end(); ++it)
 	{
-
 		if (it->first == 595)
 		{
 			t = CTime::GetCurrentTime();
@@ -101,7 +99,6 @@ static unsigned int   hth1;
 //线程
 unsigned __stdcall ServerWork(void *pInfo)
 {
-
 #ifdef updataOnOffDTU
 	std::thread mengThread2([](int bmm) {
 		while (true) {

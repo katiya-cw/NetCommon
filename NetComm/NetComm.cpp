@@ -17,7 +17,6 @@
 #define new DEBUG_NEW
 #endif
 
-
 int g_nThisVer = 4;//°æ±¾ºÅ
 
 int tcpreceive(SOCKET s,char *pchbuf,int nsize,int ntimeoverSec)
@@ -746,7 +745,6 @@ START:
 				{
 					break;
 				}
-
 			}
 		}
 		else

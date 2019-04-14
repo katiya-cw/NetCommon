@@ -7,7 +7,9 @@
 #include "../../MyDefine.h"
 
 
-int pascal NetComm(char* pServerIP, int nPort, CALL_BACK_GET_DATA callGetBack, CALL_BACK_GET_DATA_GPRS callGetBack2, CALL_BACK_EXCUTE callExcuteBack, CALL_BACK_SHUTDOWN callShutdownBack);
+int pascal NetComm(char* pServerIP, int nPort, CALL_BACK_GET_DATA callGetBack,
+	CALL_BACK_GET_DATA_GPRS callGetBack2, CALL_BACK_EXCUTE callExcuteBack,
+	CALL_BACK_SHUTDOWN callShutdownBack);
 int pascal DownLoadFile(char* pServerIP, int nPort, char* strSaveFile, CALL_BACK_DOWNLOAD callBack);
 int pascal myfction(int data1);
 int pascal NetSendMyData(int DtuID, unsigned char MepID, unsigned char *pData, int nLen);
@@ -28,14 +30,6 @@ int pascal NetSendMyData(int DtuID, unsigned char MepID, unsigned char *pData, i
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-_ConnectionPtr  m_pConnection;
-CString str23;
-CString str24;
-int tempmy = 0;
-_RecordsetPtr   m_pRecordset;
-_RecordsetPtr   m_pRecordset1;
-_RecordsetPtr   m_pRecordset2;
-_RecordsetPtr   m_pRecordset3;
 
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
@@ -295,13 +289,6 @@ void CTestDlg::OnOK()
 //	CDialog::OnOK();
 }
 
-
-
-
-
-
-
-
 void CTestDlg::OnButton1()
 {
 	int i = 0; unsigned char mybuf[32];
@@ -315,28 +302,6 @@ void CTestDlg::OnButton1()
 	//	Ip=atol(tt1);
 	Ip = (LPSTR)(LPCSTR)tt1;
 
-	//数据库连接-----------START---------
-
-
-		//初始化
-
-	 /*
-	 if (vspdctomysql->ConnMySQL(host, port, dbname, user, passwd, charset, Msg) == 0)
-	 {
-		 //   AfxMessageBox("MYSQL数据库连接成功");
-	 }
-		else
-		{
-			//   AfxMessageBox(Msg);
-		}
-	 */
-
-
-	 //数据库链接-----------END-------
-
-	//memset(MYbb,0,32);//发送前先清空接收缓冲区
-	// SetTimer(1,500,NULL); //单位是毫秒
-
 	//CALL_BACK_GET_DATA
 	CALL_BACK_GET_DATA callBack_GetData;
 	CALL_BACK_EXCUTE  callBack_EXCUTE;
@@ -347,34 +312,7 @@ void CTestDlg::OnButton1()
 	callBack_EXCUTE = callBack_EXCUTEFunction;
 	callBack_ShutDown = callBack_ShutDownFunction;
 	callBack_GPRS = callBack_GPRSFunction;
-#if 0 //pj
-	HINSTANCE hdll;
 
-	MyNetComm exNetComm;
-	Nmyfction exNmyfction;
-	MYNetSendMyData exNetSendMyData;
-	MYDownLoadFile  exDownLoadFile;
-	MYregMYdevice exregMYdevice;
-
-
-	hdll = LoadLibrary("NetComm.dll ");
-	if (hdll != NULL)
-	{
-		exNetComm = (MyNetComm)GetProcAddress(hdll, "NetComm");
-		exNmyfction = (Nmyfction)GetProcAddress(hdll, "myfction");
-		exNetSendMyData = (MYNetSendMyData)GetProcAddress(hdll, "NetSendMyData");
-
-		exDownLoadFile = (MYDownLoadFile)GetProcAddress(hdll, "DownLoadFile");
-		exregMYdevice = (MYregMYdevice)GetProcAddress(hdll, "regMYdevice");
-	}
-	else
-	{
-		AfxMessageBox("无法加载DLL---NetComm.dll");
-		return;
-
-
-	}
-#endif
 	UpdateData(true);
 	//start run your function
 	int mm = 5;
@@ -383,47 +321,26 @@ void CTestDlg::OnButton1()
 	mm = 8;
 
 	i = exregMYdevice();
-	// i = exNetComm(Ip, Comm, callBack_GetData,callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
-
-
 
 	try
 	{
-
 		i = exNetComm(Ip, Comm, callBack_GetData, callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
 	}
 	catch (_com_error *e)
 	{
 
-}
+	}
 	UpdateData(false);
-	//FreeLibrary(hdll);
 
 	if (i == 0)
 	{
-		// timer1.Enabled = false;
 		MessageBox("已经上线");
 	}
 	else
 	{
-		// timer1.Enabled = true;
-		// toolStripStatusLink.Text = "掉线....请重连";
 		MessageBox("掉线....请重连或者检查服务器是否打开?");
 	}
-
-	//   memset(mybuf,11,32);
-
-	  //i = exNetSendMyData(19,1,mybuf,32);
-
-
-//FreeLibrary(hdll);
-
-
-
-
 }
-
-
 
 void CTestDlg::OnButton2()
 {
@@ -500,11 +417,6 @@ void CTestDlg::OnButton4()
 	//	AfxMessageBox("3成功");
 	SqlOPP.CloseSql();
 	::CoUninitialize();//反初始化COM库
-
-
-
-
-
 }
 
 void CTestDlg::OnButton5()
@@ -618,29 +530,23 @@ unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned 
 		{
 			return 0;
 		}
-
-
 	}
 	catch (_com_error *e)
 	{
 
 	}
 	OutputDebug("myTEST  MENGsendToDtu()   end..");
-
-	//FreeLibrary(hdll);	
 }
-
 
 void SendLoop()
 {
 
 }//发送处理逻辑
+
 void  RevLoop()
 {
 
 }//接收处理逻辑
-
-
 
 void CTestDlg::OnTimer(UINT nIDEvent)
 {

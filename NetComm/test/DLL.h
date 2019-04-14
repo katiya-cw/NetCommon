@@ -436,8 +436,6 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 		{
 			//		AfxMessageBox("1成功");
 		}
-
-
 	}
 #endif
 	if (MYbb[3] == 0x07) //相当于心跳码，用来确认哪些是上线的，哪些是不在线的 最长20分钟如果没来数据就重新计算

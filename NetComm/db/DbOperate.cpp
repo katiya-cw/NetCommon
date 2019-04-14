@@ -540,21 +540,12 @@ unsigned char CDbOperate::MyQuerySQL(int deviceID)//强烈注意里面有全局变量MyEmpI
 	OutputDebug("myTEST  1CDbOperate:: MyQuerySQL()  start..");
 
 	ii = 0;
-
-
 	CRecordset  pRecordset(&m_db);
 	try
 	{
-
 		CString strData;
-		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
