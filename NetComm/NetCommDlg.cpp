@@ -6,15 +6,15 @@
 #include "NetCommDlg.h"
 #include "afxdialogex.h"
 #include "resource.h"
-#include "httpserver.h"
-#include "LogicCenter.h"
 #include "DeviceEvent.h"
 #include "MD5/common.h"  
 #include "db/DbOperate.h""
 #include "../MyDefine.h"
 #include "ThreadPool.h"
 #include "LogUtil/easylogging++.h"
-#include "Http/HttpClientManager.h"
+#include "Http/EvppHttpClientManager.h"
+#include "Http/NetCommHttpServerInstance.h"
+#include "Utils/Utils.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -108,23 +108,15 @@ unsigned __stdcall ServerWork(void *pInfo)
 		}
 	}, 3);
 #endif
-
-	CHttpServer *server = (CHttpServer*)pInfo;
-
-	server->SetRecvCallBack(callback_OnServerRecv);
-	while (s_ServerRun)
-	{
-		server->work();
-	}
-	server->Release();
 	return 0;
 }
+
 unsigned __stdcall ClientWork(void* data) {
 	OutputDebug("begin to send request to server.");
 	CString text((char*)data);
 	delete[] data;
 
-	std::string ret = CHttpClientManager::getInstance()->request(text.GetBuffer());
+	std::string ret = CEvppHttpClientManager::getInstance()->request(text.GetBuffer());
 
 	return 0;
 }
@@ -165,7 +157,6 @@ BOOL CNetCommDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 	el::Loggers::configureFromGlobal("log.conf");
 	CString startLog = "The program has started.";
-	LOG_INFO << startLog;
 
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
@@ -217,15 +208,14 @@ BOOL CNetCommDlg::OnInitDialog()
 		((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS))->GetAddress(dwIP);
 		m_threadInfo.ip = htonl(dwIP);
 		m_threadInfo.port = httpRevUsePort;
-		m_server.Init(m_threadInfo.port, m_threadInfo.ip);
-		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)&m_server, 0, 0);
+		CNetCommHttpServerInstance::getInstance()->start(10, m_threadInfo.port);
+		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)NULL, 0, 0);
 
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("停止");
 	}
 	else
 	{
 		s_ServerRun = false;
-		m_server.Release();
 
 		Sleep(50);
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("启动");
@@ -318,15 +308,14 @@ void CNetCommDlg::OnBnClickedStart()
 		((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS))->GetAddress(dwIP);
 		m_threadInfo.ip = htonl(dwIP);
 		m_threadInfo.port = httpRevUsePort;
-		m_server.Init(m_threadInfo.port, m_threadInfo.ip);
-		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)&m_server, 0, 0);
+		CNetCommHttpServerInstance::getInstance()->start(10, m_threadInfo.port);
+		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)NULL, 0, 0);
 	
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("停止");
 	}
 	else
 	{
 		s_ServerRun = false;
-		m_server.Release();
 
 		Sleep(50);
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("启动");
@@ -387,21 +376,13 @@ void CNetCommDlg::OnBnClickedButtonSend()
 	_beginthreadex(NULL, 0, ClientWork, (void*)buf, 0, 0);
 }
 
-void SendBACKtoPHPserver(CString text)
-{
-	// TODO: 在此添加控件通知处理程序代码
-
-	std::string ret = CHttpClientManager::getInstance()->request(text.GetBuffer());
-//	OutputClientString(ret);
-}
-
 //显示服务器参数
 void CNetCommDlg::ShowServerParam(CString param)
 {
 	DWORD ID[] = { IDC_EDIT_S_P1,IDC_EDIT_S_P2,IDC_EDIT_S_P3,IDC_EDIT_S_P4,
 				   IDC_EDIT_S_P5,IDC_EDIT_S_P6,IDC_EDIT_S_P7,IDC_EDIT_S_P8 };
 	int i = 0;
-	vector<CString> vec = GetURLParamValue(param);
+	std::vector<CString> vec = GetURLParamValue(param);
 	int size = vec.size();
 	if (vec.empty())
 	{

@@ -1,15 +1,15 @@
 #pragma once
 
-#include "HttpClient.h"
+#include "EvppHttpClient.h"
 
-class CHttpClientManager {
+class CEvppHttpClientManager {
 public:
-	static CHttpClientManager* getInstance() {
- 	  static CHttpClientManager* gHttpClient = NULL;
+	static CEvppHttpClientManager* getInstance() {
+ 	  static CEvppHttpClientManager* gHttpClient = NULL;
 	  static std::mutex lock;
 	  lock.lock();
 	  if (gHttpClient == NULL) {
-	    gHttpClient = new CHttpClientManager();
+	    gHttpClient = new CEvppHttpClientManager();
 	  }
 	  lock.unlock();
 	  return gHttpClient;
@@ -21,6 +21,6 @@ public:
 	}
 
 private:
-	CHttpClient m_httpClient;
+	CEvppHttpClient m_httpClient;
 };
 

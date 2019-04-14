@@ -1,104 +1,65 @@
-#include "stdafx.h"
-#include "LogicCenter.h"
+#include "NetCommHttpServerInstance.h"
+#include "EvppHttpServer.h"
+#include "EvppHttpClientManager.h"
 #include "DeviceEvent.h"
-#include "ThreadPool.h"
-//引入头文件   
-#include "MD5/common.h"  
-#include "db/DbOperate.h""
-#include "../MyDefine.h"
+#include "Utils/Utils.h"
+#include "Utils/NetClient.h"
+#include "db/DbOperate.h"
+#include "MD5/common.h"
+#include <vector>
+#include <functional>
 
-extern ThreadPool threadPool;
-extern unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime);
-extern void SendBACKtoPHPserver(CString text);
-extern int SQLwriteFlag;
-extern int myDTU_ID;
-extern int myID;
-#ifdef ADD_More_CH
-extern int pascal NetSendMyDataTrue2(int DtuID, unsigned char nMeter_ID, int money, int delayTime, int CH);
-extern int pascal NetSendMyDataTrue3(int DtuID, unsigned char nMeter_ID, int money, int delayTime, int CH, int paymoney);
-#endif
+using namespace std::placeholders;
 
+unsigned DeviceDataWork(std::string uri);
 
-#ifdef SENDforOK
-extern unsigned char DevSendTimes[SENDTIMES_LENS];
-#endif
-//获取URL的参数值
-vector<CString> GetURLParamValue(CString param)
+void SendBACKtoPHPserver(CString text)
 {
-	vector<CString> vec;
-	int i = 0;
-	int first = 0;
-	int last = 0;
-	while (i < 8)
-	{
-		first = param.Find("=", last);
-		if (first != -1) {
-			last = param.Find("&", first + 1);
-			if (last == -1)
-			{
-				last = param.GetLength();
-			}
-		}
-		else {
-			break;
-		}
+	// TODO: 在此添加控件通知处理程序代码
 
-		if (last != first && last > first)
-		{
-			CString strTemp = param.Mid(first + 1, last - first - 1);
-			vec.push_back(strTemp);
-			i++;
-		}
-		else
-		{
-			break;
-		}
-	}
-
-	return vec;
+	std::string ret = CEvppHttpClientManager::getInstance()->request(text.GetBuffer());
+	LOG_INFO << "Send to PHP server response : " << ret;
 }
 
-CString gettime()
-{
-	CString temp;
-	CString str;
-	SYSTEMTIME st;
-	GetLocalTime(&st); // 获取当前时间
-	temp = "";
-	str.Format("%d", st.wYear); temp = temp + str;
-	str.Format("%d", st.wMonth); temp = temp + str;
-	str.Format("%d", st.wDay); temp = temp + str;
-	str.Format("%d", st.wHour); temp = temp + str;
-	str.Format("%d", st.wMinute); temp = temp + str;
-
-	return temp;
+bool CNetCommHttpServerInstance::start(int threadNum, int port) {
+	CEvppHttpServer::getInstance()->registerHandler("/",
+		std::bind(&CNetCommHttpServerInstance::handler, this, _1, _2, _3));
+	std::vector<int> ports;
+	ports.push_back(port);
+	CEvppHttpServer::getInstance()->start(threadNum, ports);
+	return true;
 }
 
-CString gettime2()
-{
-	CString temp;
-	CString str;
-	SYSTEMTIME st;
-	GetLocalTime(&st); // 获取当前时间
-	temp = "";
-
-	str.Format("%d", st.wHour); temp = temp + str;
-	str.Format("%d", st.wMinute); temp = temp + str;
-
-	return temp;
+void CNetCommHttpServerInstance::handler(evpp::EventLoop* loop,
+	const evpp::http::ContextPtr& ctx,
+	const evpp::http::HTTPSendResponseCallback& cb) {
+	std::string machineIdKey = "machineid";
+	std::string machineIdValue = ctx->GetQuery(machineIdKey.c_str(), machineIdKey.length());
+	int machineId = atoi(machineIdValue.c_str());
+	std::string uri = ctx->original_uri();
+	std::string response = "<html><head><title></title></head><body>" + 
+		uri + "</body></html>\r\n";
+	cb(response);
+	m_threadPool.enqueue([](std::string uri) {
+		DeviceDataWork(uri);
+	}, machineId, uri);
 }
 
 //线程
-unsigned __stdcall DeviceDataWork(void *strURL)
+unsigned DeviceDataWork(std::string uri)
 {
-	char strError[1024] = { 0 }; int i; float  paymoney2 = 0;
+	const char * MYmd5val; Ccommon md5Class;
+	char strError[1024] = { 0 }; 
+	int i;
+	float  paymoney2 = 0;
 	const char *b = "127.0.0.1";  char *a = "abcdefgh127.0.0.1";
-	unsigned char tem; CString str; CString getTIME; const char * MYmd5val; Ccommon md5Class;
+	unsigned char tem = 0x0; 
+	CString str; CString getTIME; 
 	unsigned int Down_Data[30];
 	unsigned int CheckBox[2];  unsigned int CH; CString myAction;
 
 	//获取设备ID
-	vector<CString> vec = GetURLParamValue(CString((char*)strURL));
+	std::vector<CString> vec = GetURLParamValue(CString(uri.c_str()));
 	if (!vec.empty())
 	{
 		int dtu_id = 0; int paymoney = 0; int id = 0; CString md5val; CString time; float blance = 0; int id2 = 0;
@@ -112,32 +73,27 @@ unsigned __stdcall DeviceDataWork(void *strURL)
 		//创建事件
 		CDeviceEvent Devent;
 		//通过ID来置事件,需要判断数据--（下面是通知相应的事件，让对应于每个设备的等待线程停止工作）	
-		HANDLE hEvent1 = Devent.GetEvent(dtu_id); //先把同一设备的上一个事件（如果有的话）结束了，防止重复影响其他订单
-		if (hEvent1 != NULL)
+		HANDLE hEvent = Devent.GetEvent(dtu_id); //先把同一设备的上一个事件（如果有的话）结束了，防止重复影响其他订单
+		if (hEvent != NULL)
 		{
-			SetEvent(hEvent1);
-		}
-		if (hEvent1)
-		{
-			CloseHandle(hEvent1);
+			// 不会出现，dtu_id 只可能是一个线程处理，不过这里处理一下，同时记录日志
+			LOG_ERROR << "dtu id work is duplicate : " << dtu_id;
+			SetEvent(hEvent);
+			CloseHandle(hEvent);
+			Devent.Delete(dtu_id);
 		}
 		Devent.Create(dtu_id);
-		HANDLE hEvent = Devent.GetEvent(dtu_id);
+		hEvent = Devent.GetEvent(dtu_id);
 
-
-		///
 		//执行发送数据到设备...............
-
 		sscanf_s(vec[5].GetBuffer(0), "%f", &blance);
 		if (blance == -1)		//临时非会员：http://127.0.0.1:8090/?machineid=56&paymoney=2.00&id=115347&md5val=187c8207b32ee9eb37ccff8a9bf15b02&time=201611130605&blance=-1
 		{
 			sscanf_s(vec[1].GetBuffer(0), "%d", &paymoney);
-
 			sscanf_s(vec[2].GetBuffer(0), "%d", &id);
 #ifdef ADD_More_CH
 			sscanf_s(vec[2].GetBuffer(0), "%d", &CH); //通道号
 			if (CH > 10) CH = 0;;//如果CH>10，说明是以前的不带通道的协议使用的消费ID，这里假定消费ID都大于10，有点风险。
-
 #endif
 			md5val = vec[3];
 			time = vec[4];
@@ -174,10 +130,8 @@ unsigned __stdcall DeviceDataWork(void *strURL)
 				if (dtu_id < SENDTIMES_LENS)
 					DevSendTimes[dtu_id] = SENDTIMES; //保证如果发送不成功就连续发送多次，
 #endif
-				Devent.UnLock();
 				if (tem)
 				{
-
 					::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 					CDbOperate SqlOPP;
 					SqlOPP.OpenSql();
@@ -593,7 +547,7 @@ unsigned __stdcall DeviceDataWork(void *strURL)
 					tt2 += "&blance=";
 					str.Format("%d", -2); tt2 = tt2 + str;
 					OutputClientString(tt2);//发给发送窗口作为提示
-				// tt2 = "http://127.0.0.1:8090/?machineid=56&paymoney=2.00&id=115347&md5val=187c8207b32ee9eb37ccff8a9bf15b02&time=201611130605&blance=-2";
+											// tt2 = "http://127.0.0.1:8090/?machineid=56&paymoney=2.00&id=115347&md5val=187c8207b32ee9eb37ccff8a9bf15b02&time=201611130605&blance=-2";
 					Devent.Lock();
 					SendBACKtoPHPserver(tt2);
 					Devent.UnLock();
@@ -612,72 +566,16 @@ unsigned __stdcall DeviceDataWork(void *strURL)
 	}
 	//_endthreadex(0);//_beginthreadex的退出RETUNE，自带，不需要添加
 	/*注意：
-_endthread 会自动关闭线程句柄。 （该行为与 Win32 ExitThread API 不同。）因此，当你使用 _beginthread 和 _endthread 时，请不要通过调用 Win32 CloseHandle API 来显式关闭线程句柄。
+	_endthread 会自动关闭线程句柄。 （该行为与 Win32 ExitThread API 不同。）因此，当你使用 _beginthread 和 _endthread 时，请不要通过调用 Win32 CloseHandle API 来显式关闭线程句柄。
 
-与 Win32 ExitThread API 相同，_endthreadex 不会关闭线程句柄。 因此，当你使用 _beginthreadex 和 _endthreadex 时，必须通过调用 Win32 CloseHandle API 来关闭线程句柄。
+	与 Win32 ExitThread API 相同，_endthreadex 不会关闭线程句柄。 因此，当你使用 _beginthreadex 和 _endthreadex 时，必须通过调用 Win32 CloseHandle API 来关闭线程句柄。
 
-_endthread 和 _endthreadex 会导致 C++ 析构函数在不会调用的线程中处于挂起状态
+	_endthread 和 _endthreadex 会导致 C++ 析构函数在不会调用的线程中处于挂起状态
 
-两者的区别：
-beginthreadex是一个C运行时库的函数，CreateThread是一个系统API函 数，_beginthreadex内部调用了CreateThread。为什么要有两个呢？因为C 运行库里面有一些函数使用了全局量，如果使用CreateThread 的情况下使用这些C 运行库的函数，就会出现不安全的问题。而 _beginthreadex 为这些全局变量做了处理，使得每个线程都有一份独立的“全局”量。
+	两者的区别：
+	beginthreadex是一个C运行时库的函数，CreateThread是一个系统API函 数，_beginthreadex内部调用了CreateThread。为什么要有两个呢？因为C 运行库里面有一些函数使用了全局量，如果使用CreateThread 的情况下使用这些C 运行库的函数，就会出现不安全的问题。而 _beginthreadex 为这些全局变量做了处理，使得每个线程都有一份独立的“全局”量。
 
 
 	*/
 	return 0;
-}
-
-//服务器接收数据回调
-bool callback_OnServerRecv(CString strURL)
-{
-	OutputDebug("myTEST  callback_OnServerRecv()  start..");
-	static CString buff[1000];
-	static int Count = 0;
-#ifdef PreventMemoryOverflow
-	buff[Count] = strURL;
-	if (strstr(((char *)strURL.GetBuffer()), "127.0.0.1") == NULL) //过滤掉一些爬墙程序，减去一些麻烦，
-	{
-		OutputDebug("myTEST908  not found 127.0.0.1..");
-		return -21;
-	}
-
-	//获取设备ID
-	vector<CString> vec = GetURLParamValue(strURL);
-	if (!vec.empty())
-	{
-		if ((vec.size()) < 6)
-		{
-			OutputDebug("myTEST vector数组元素小于6......");
-			return -1;
-		}
-#ifdef ADD_More_CH
-		if ((vec.size()) > 8)
-		{
-			OutputDebug("myTEST vector数组元素大于8......");
-			return -2;
-		}
-#else
-		if ((vec.size()) > 6)
-		{
-			OutputDebug("myTEST vector数组元素大于6......");
-			return -2;
-		}
-#endif
-
-		int dtu_id = 0;
-		sscanf_s(vec[0].GetBuffer(0), "%d", &dtu_id);  //获取machineid
-		threadPool.enqueue([](void* buffer) {
-			DeviceDataWork(buffer);
-		}, dtu_id, (void*)buff[Count].GetBuffer());
-	}
-#else
-	buff[Count] = strURL;
-	_beginthreadex(NULL, 0, DeviceDataWork, (void*)buff[Count].GetBuffer(0), 0, 0);
-#endif
-	Count++;
-	if (Count >= 1000)
-	{
-		Count = 0;
-	}
-	OutputDebug("myTEST  callback_OnServerRecv()   end..");
-	return true;
 }

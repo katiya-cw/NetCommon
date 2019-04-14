@@ -34,9 +34,6 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="httpserver.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="test\DLL.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -49,9 +46,6 @@
     <ClInclude Include="DeviceEvent.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="LogicCenter.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MD5\common.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -62,15 +56,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Http\EventLoopManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Http\HttpClient.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Http\HttpClientManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Http\HttpServer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="TcpServer\ConnectBase.h">
@@ -94,6 +79,24 @@
     <ClInclude Include="Utils\Utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Http\NetCommHttpServerInstance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Http\EvppHttpServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Http\EvppHttpClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Http\EvppHttpClientManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\NetClient.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NetComm.cpp">
@@ -114,9 +117,6 @@
     <ClCompile Include="unzip.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="httpserver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="test\testDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -126,19 +126,10 @@
     <ClCompile Include="DeviceEvent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LogicCenter.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MD5\common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LogUtil\easylogging++.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Http\HttpClient.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Http\HttpServer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TcpServer\ConnectManager.cpp">
@@ -148,6 +139,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="TcpClient\TcpClient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Http\NetCommHttpServerInstance.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Http\EvppHttpServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Http\EvppHttpClient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\NetClient.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

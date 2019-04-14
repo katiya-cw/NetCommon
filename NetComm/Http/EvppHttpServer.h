@@ -4,12 +4,12 @@
 #include <string>
 #include <vector>
 
-class CHttpServer {
+class CEvppHttpServer {
 public:
-	static CHttpServer* getInstance();
+	static CEvppHttpServer* getInstance();
 
 private:
-	CHttpServer() {
+	CEvppHttpServer() {
 		m_started.store(false);
 	}
 

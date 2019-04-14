@@ -5,17 +5,8 @@
 #include "testDlg.h"
 #include "DLL.h"
 #include "../../MyDefine.h"
-
-
-int pascal NetComm(char* pServerIP, int nPort, CALL_BACK_GET_DATA callGetBack,
-	CALL_BACK_GET_DATA_GPRS callGetBack2, CALL_BACK_EXCUTE callExcuteBack,
-	CALL_BACK_SHUTDOWN callShutdownBack);
-int pascal DownLoadFile(char* pServerIP, int nPort, char* strSaveFile, CALL_BACK_DOWNLOAD callBack);
-int pascal myfction(int data1);
-int pascal NetSendMyData(int DtuID, unsigned char MepID, unsigned char *pData, int nLen);
-int pascal regMYdevice(void);
-int pascal NetSendMyDataTrue(int DtuID, unsigned char nMeter_ID, int money, int delayTime);
-int pascal NetSendMyData(int DtuID, unsigned char MepID, unsigned char *pData, int nLen);
+#include "Utils/Utils.h"
+#include "Utils/NetClient.h"
 
 #define exNetComm NetComm
 #define exNmyfction myfction
@@ -484,9 +475,6 @@ void CTestDlg::OnButton12()
 		float  ttemp88;
 		ttemp88 = atof(tt1); ttemp1 = ttemp88 * 100;
 
-		myREVflag = 0;//判断什么时候接收到数据，就置1
-
-
 		i = exNetSendMyDataTrue(ttemp2, ttemp189, ttemp1, ttemp3);//向设备号为19的地址发送56.89元	           
 
 		if (i == 45)//f发送成功
@@ -502,40 +490,6 @@ void CTestDlg::OnButton12()
 	//FreeLibrary(hdll);	
 
 
-}
-//DevID:设备主地址
-//Dev_id设备子地址
-unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime)
-{
-	int i = 0;// unsigned char mybuf[32];
-
-	unsigned long ttemp, ttemp1, ttemp2, ttemp3;
-	unsigned char ttemp189;
-	CString  tt1;
-
-	OutputDebug("myTEST  MENGsendToDtu()  start..");
-
-	try
-	{
-		myREVflag = 0;//判断什么时候接收到数据，就置1
-
-
-		i = exNetSendMyDataTrue(DevID, Dev_id, money, deyTime);//向设备号为19的地址发送56.89元	           
-
-		if (i == 45)//f发送成功
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	catch (_com_error *e)
-	{
-
-	}
-	OutputDebug("myTEST  MENGsendToDtu()   end..");
 }
 
 void SendLoop()

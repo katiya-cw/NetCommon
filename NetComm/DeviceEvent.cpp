@@ -27,34 +27,34 @@ bool CDeviceEvent::UnLock()
 	return true;
 }
 
-bool    CDeviceEvent::Create(int id)
+bool CDeviceEvent::Create(int id)
 {
+	Lock();
 	if (m_devEvent.find(id) == m_devEvent.end())
 	{
-		Lock();
 		m_devEvent[id] = CreateEvent(NULL, TRUE, FALSE, NULL);		
-		UnLock();
 	}
 	else
 	{
 		ResetEvent(m_devEvent[id]);
 	}
+	UnLock();
 	return true;
 }
 
-HANDLE  CDeviceEvent::GetEvent(int id)
+HANDLE CDeviceEvent::GetEvent(int id)
 {
+	HANDLE event = NULL;
+	Lock();
 	if (m_devEvent.find(id) != m_devEvent.end())
 	{
-		return m_devEvent[id];
+		event = m_devEvent[id];
 	}
-	else
-	{
-		return NULL;
-	}
+	UnLock();
+	return event;
 }
 
-bool    CDeviceEvent::Delete(int id)
+bool CDeviceEvent::Delete(int id)
 {
 	Lock();
 	m_devEvent.erase(id);

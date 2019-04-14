@@ -14,7 +14,7 @@
 
 class ThreadPool {
 public:
-	ThreadPool(size_t);
+	ThreadPool(size_t threads = 10);
 	template<class F, class... Args>
 	auto enqueue(F&& f, int index, Args&&... args)
 		->std::future<typename std::result_of<F(Args...)>::type>;

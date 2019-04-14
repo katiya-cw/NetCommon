@@ -199,12 +199,11 @@
     <ClInclude Include="db\DbOperate.h" />
     <ClInclude Include="db\DbOperateInstance.h" />
     <ClInclude Include="DeviceEvent.h" />
-    <ClInclude Include="httpserver.h" />
     <ClInclude Include="Http\EventLoopManager.h" />
-    <ClInclude Include="Http\HttpClient.h" />
-    <ClInclude Include="Http\HttpClientManager.h" />
-    <ClInclude Include="Http\HttpServer.h" />
-    <ClInclude Include="LogicCenter.h" />
+    <ClInclude Include="Http\EvppHttpClient.h" />
+    <ClInclude Include="Http\EvppHttpClientManager.h" />
+    <ClInclude Include="Http\EvppHttpServer.h" />
+    <ClInclude Include="Http\NetCommHttpServerInstance.h" />
     <ClInclude Include="LogUtil\easylogging++.h" />
     <ClInclude Include="MD5\common.h" />
     <ClInclude Include="NetComm.h" />
@@ -219,6 +218,8 @@
     <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\testDlg.h" />
+    <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="Utils\NetClient.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -228,10 +229,8 @@
     <ClCompile Include="Des.cpp" />
     <ClCompile Include="DeviceEvent.cpp" />
     <ClCompile Include="DialogReg.cpp" />
-    <ClCompile Include="httpserver.cpp" />
-    <ClCompile Include="Http\HttpClient.cpp" />
-    <ClCompile Include="Http\HttpServer.cpp" />
-    <ClCompile Include="LogicCenter.cpp" />
+    <ClCompile Include="Http\EvppHttpClient.cpp" />
+    <ClCompile Include="Http\EvppHttpServer.cpp" />
     <ClCompile Include="LogUtil\easylogging++.cpp" />
     <ClCompile Include="MD5\common.cpp" />
     <ClCompile Include="NetComm.cpp" />
@@ -249,6 +248,9 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\NetComm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="unzip.cpp" />
+    <ClCompile Include="Http\NetCommHttpServerInstance.cpp" />
+    <ClCompile Include="Utils\NetClient.cpp" />
+    <ClCompile Include="Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NetComm.rc" />

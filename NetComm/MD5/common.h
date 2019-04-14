@@ -1,5 +1,5 @@
-#include <windows.h>
-#include <windows.h>  
+#include "stdafx.h"
+
 /* Data structure for MD5 (Message-Digest) computation */
 typedef struct {
 	ULONG i[2];                          /* number of _bits_ handled mod 2^64 */
@@ -22,10 +22,6 @@ typedef void(WINAPI* PMD5Update) PROTO_LIST((MD5_CTX *, const unsigned char *, u
 typedef void(WINAPI* PMD5Final)PROTO_LIST((MD5_CTX *));
 
 //end globle define  
-
-
-
-
 
 class Ccommon
 {

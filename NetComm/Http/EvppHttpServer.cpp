@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "HttpServer.h"
+#include "EvppHttpServer.h"
 
 #include <mutex>
 
-CHttpServer* CHttpServer::getInstance() {
-	static CHttpServer* gHttpServer = NULL;
+CEvppHttpServer* CEvppHttpServer::getInstance() {
+	static CEvppHttpServer* gHttpServer = NULL;
 	static std::mutex lock;
 	lock.lock();
 	if (gHttpServer == NULL) {
-		gHttpServer = new CHttpServer();
+		gHttpServer = new CEvppHttpServer();
 	}
 	lock.unlock();
 	return gHttpServer;
 }
 
-bool CHttpServer::start(uint32_t threadNum, std::vector<int> ports) {
+bool CEvppHttpServer::start(uint32_t threadNum, std::vector<int> ports) {
 	if (m_started.load()) {
 		// http server started already
 		return true;
@@ -26,7 +26,7 @@ bool CHttpServer::start(uint32_t threadNum, std::vector<int> ports) {
 	return true;
 }
 
-bool CHttpServer::stop() {
+bool CEvppHttpServer::stop() {
 	if (!m_started.load()) {
 		// http server is stopped already
 		return true;
@@ -36,7 +36,7 @@ bool CHttpServer::stop() {
 	return true;
 }
 
-void CHttpServer::registerHandler(std::string path, evpp::http::HTTPRequestCallback callback) {
+void CEvppHttpServer::registerHandler(std::string path, evpp::http::HTTPRequestCallback callback) {
 	m_httpServer->RegisterHandler(path, callback);
 }
 

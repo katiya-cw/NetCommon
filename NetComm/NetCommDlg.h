@@ -4,7 +4,6 @@
 
 #pragma once
 #include "test/testDlg.h"
-#include "httpserver.h"
 
 struct TREAD_INFO
 {
@@ -56,7 +55,6 @@ public:
 	afx_msg void OnBnClickedButtonTest();
 private:
 	CTestDlg m_dlg;
-	CHttpServer m_server;
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedStart2();

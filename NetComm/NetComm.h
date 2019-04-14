@@ -30,3 +30,5 @@ public:
 };
 
 extern CNetCommApp theApp;
+
+int regMYdevice(void);

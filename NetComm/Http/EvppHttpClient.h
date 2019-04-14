@@ -8,10 +8,10 @@
 #include <evpp/httpc/response.h>
 #include <future>
 
-class CHttpClient {
+class CEvppHttpClient {
 public:
-	CHttpClient();
-	~CHttpClient();
+	CEvppHttpClient();
+	~CEvppHttpClient();
 
 public:
 	std::string request(std::string url);
