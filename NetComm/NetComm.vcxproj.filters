@@ -97,6 +97,15 @@
     <ClInclude Include="Utils\NetClient.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Des.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DialogReg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="unzip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NetComm.cpp">

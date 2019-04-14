@@ -198,7 +198,9 @@
     <ClInclude Include="..\MyDefine.h" />
     <ClInclude Include="db\DbOperate.h" />
     <ClInclude Include="db\DbOperateInstance.h" />
+    <ClInclude Include="Des.h" />
     <ClInclude Include="DeviceEvent.h" />
+    <ClInclude Include="DialogReg.h" />
     <ClInclude Include="Http\EventLoopManager.h" />
     <ClInclude Include="Http\EvppHttpClient.h" />
     <ClInclude Include="Http\EvppHttpClientManager.h" />
@@ -219,6 +221,7 @@
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\testDlg.h" />
     <ClInclude Include="ThreadPool.h" />
+    <ClInclude Include="unzip.h" />
     <ClInclude Include="Utils\NetClient.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
