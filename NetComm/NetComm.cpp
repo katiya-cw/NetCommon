@@ -18,8 +18,6 @@
 
 int g_nThisVer = 4;//°æ±¾ºÅ
 
-
-
 CString GetCurrentPathName()
 {
 	char buf[MAX_PATH] = {0};
@@ -213,10 +211,6 @@ int _ConnectServer(char* ip,int port,SOCKET &s)
 		
 		return 3;
 	}
-// 	CString strPath = GetCurrentPathName();
-// 	CString strFileName = 
-// 	GetModelFromRes
-// 	DeleteFile();
 	return 0;
 }
 
