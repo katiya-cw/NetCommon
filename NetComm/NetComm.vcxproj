@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="..\MyDefine.h" />
     <ClInclude Include="db\DbOperate.h" />
+    <ClInclude Include="db\DbOperateInstance.h" />
     <ClInclude Include="DeviceEvent.h" />
     <ClInclude Include="httpserver.h" />
     <ClInclude Include="Http\EventLoopManager.h" />
@@ -218,6 +219,7 @@
     <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\testDlg.h" />
+    <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\DbOperate.cpp">

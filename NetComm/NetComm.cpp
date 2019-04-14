@@ -9,7 +9,9 @@
 #include "Des.h"
 #include "../MyDefine.h"
 #include "DialogReg.h"
-#include "db/DbOperate.h""
+#include "db/DbOperate.h"
+#include "db/DbOperateInstance.h"
+#include "Utils/Utils.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,97 +19,6 @@
 
 
 int g_nThisVer = 4;//版本号
-
-CString GetCurrentPathName()
-{
-	char buf[MAX_PATH] = {0};
-	DWORD len = MAX_PATH;
-	
-	GetModuleFileName(NULL,buf,len);
-	CString exe;
-	exe.Format("%s",buf);
-	int n = exe.ReverseFind('\\');
-	exe = exe.Left(n);
-	
-	return exe;
-}
-
-
-CString GetSystemError(int code)
-{
-	CString strR;
-	LPVOID lpMsgBuf;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|
-		FORMAT_MESSAGE_FROM_SYSTEM|
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		code,
-		MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf,
-		0,
-		NULL);
-	strR.Format("%s",lpMsgBuf);
-	
-	return strR;
-	
-}
-
-CString GetTempFileNames()
-{
-	CString strName;
-	char szTempName[MAX_PATH]; 
-	
-	TCHAR   szPathCopy[_MAX_PATH]; 
-	GetTempPath(_MAX_PATH,szPathCopy); 
-	GetTempFileName(szPathCopy, // dir. for temp. files 
-		"NEW",                // temp. file name prefix 
-		0,                    // create unique name 
-		szTempName);          // buffer for name 
-	
-	strName.Format("%s",szTempName);
-	return strName;
-}
-
-BOOL FileIsExist(CString name)
-{
-	CStdioFile file;
-	if(file.Open(name,CFile::modeRead))
-	{
-		file.Close();
-		return TRUE;
-	}
-	return FALSE;
-}
-
-BOOL UnZipFile(CString strFile)
-{
-	char strFileName[MAX_PATH] = {0};
-	strcpy_s(strFileName,strFile);
-	
-	char path[MAX_PATH] = {0};
-	
-	int n = strFile.ReverseFind('\\');
-	sprintf_s(path,"%s",strFile.Left(n).GetBuffer(0));
-	//	SetCurrentDirectory(path);
-	
-	char strDestName[MAX_PATH] = {0};
-	HZIP hz = OpenZip(strFileName,0);
-	ZIPENTRY ze; 
-	GetZipItem(hz,-1,&ze); 
-	int numitems=ze.index;
-	for (int i=0; i<numitems; i++)
-	{
-		GetZipItem(hz,i,&ze);
-		sprintf_s(strDestName,"%s\\%s",path,ze.name);
-		
-		UnzipItem(hz,i,strDestName);
-	}
-	
-	CloseZip(hz);
-	
-	return TRUE;
-}
-
 
 int tcpreceive(SOCKET s,char *pchbuf,int nsize,int ntimeoverSec)
 {
@@ -645,8 +556,6 @@ void MaskRem(CString strKey,CString strData,CString & strNew)
 	CDES des;
 	des.InitializeKey(strKey,TRUE);
 	des.DecryptAnyLength(strData,TRUE,strNew);
-	
-	//	strNew.Format("%s",des.GetPlaintextAnyLength());
 }
 
 int ___CheckAuth()
@@ -740,9 +649,6 @@ int pascal regMYdevice(void)
 		if(nAuth == -1)
 			dlg.m_bNoSn = TRUE;
 		dlg.DoModal();
-
-	//	if(!dlg.m_bOK)
-	//		exit(0);
 		return 0;
 	}
 	return 1;
@@ -756,9 +662,6 @@ int pascal DownLoadFile(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DO
 		if(nAuth == -1)
 			dlg.m_bNoSn = TRUE;
 		dlg.DoModal();
-
-	//	if(!dlg.m_bOK)
-	//		exit(0);
 		return 0;
 	}
 
@@ -780,7 +683,6 @@ int pascal DownLoadFile(char* pServerIP,int nPort,char* strSaveFile,CALL_BACK_DO
 	AfxBeginThread(______AFX_DOWN_LOAD,pData);
 
 	return 0;
-
 }
 
 
@@ -797,9 +699,6 @@ UINT ______AFX_CHECK_METER(LPVOID pParam)
 
 	::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 	SqlOPP2.OpenSql();
-
-
-
 START:
 	char strError[1024] = {0};
 

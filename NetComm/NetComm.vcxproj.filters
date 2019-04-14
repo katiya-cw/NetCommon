@@ -88,6 +88,12 @@
     <ClInclude Include="TcpClient\TcpClientInstance.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="db\DbOperateInstance.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NetComm.cpp">
