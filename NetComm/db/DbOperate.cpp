@@ -3,23 +3,20 @@
 #include "DbOperate.h"
 #include "../../MyDefine.h"
 
-
 int MyEmpID = 0;
-//unsigned int Down_Data[30];
-//unsigned int CheckBox[2];
 CDbOperate::CDbOperate()
 { //用IP=127.0.0.1链接有时候连接不上
 	//m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=WXData;UID=sa;PWD=123;";//自己测试电脑上的配置
   // m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=wxdata;UID=wxdata;PWD=3239508152;"; //云平台上的密码  118.190.86.76
- m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=WXData;UID=sa;PWD=xh6565911;";  //云平台上的密码   115.28.78.161上面的
-//m_sqlAddr = "Provider=SQLOLEDB.1;Server=iZm5e727lmif5mZ;DATABASE==WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码
-//	m_sqlAddr = "Provider=SQLOLEDB.1;Server=101.200.204.188;DATABASE=WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码
- //  m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码  118.190.86.76	//需要打开远程数据库上的对外连接
-  
-//	  m_sqlAddr = "Provider=SQLOLEDB.1;Server=localhost;DATABASE=wxdata;UID=sa;PWD=xh6565911;"; //云平台上的密码  118.190.86.76	//需要打开远程数据库上的对外连接
-//	  m_sqlAddr = "Provider=SQLOLEDB.1;Server=47.104.168.94;DATABASE=wxdata;UID=sa;PWD=xh6565911;";
+	m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=WXData;UID=sa;PWD=xh6565911;";  //云平台上的密码   115.28.78.161上面的
+   //m_sqlAddr = "Provider=SQLOLEDB.1;Server=iZm5e727lmif5mZ;DATABASE==WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码
+   //	m_sqlAddr = "Provider=SQLOLEDB.1;Server=101.200.204.188;DATABASE=WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码
+	//  m_sqlAddr = "Provider=SQLOLEDB.1;Server=127.0.0.1;DATABASE=WXData;UID=sa;PWD=xh6565911;"; //云平台上的密码  118.190.86.76	//需要打开远程数据库上的对外连接
 
-	  m_pSqlCon = &m_db;
+   //	  m_sqlAddr = "Provider=SQLOLEDB.1;Server=localhost;DATABASE=wxdata;UID=sa;PWD=xh6565911;"; //云平台上的密码  118.190.86.76	//需要打开远程数据库上的对外连接
+   //	  m_sqlAddr = "Provider=SQLOLEDB.1;Server=47.104.168.94;DATABASE=wxdata;UID=sa;PWD=xh6565911;";
+
+	m_pSqlCon = &m_db;
 	m_accAddr = "Provider=Microsoft.Jet.OLEDB.4.0;	Data Source = MonitorData.mdb";
 	m_sqlUser.user_name = "";
 	m_sqlUser.user_pass = "";
@@ -36,35 +33,16 @@ CDbOperate::~CDbOperate()
 //打开SQL数据库
 bool CDbOperate::OpenSql()
 {
-	HRESULT hr; 
+	HRESULT hr;
 	OutputDebug("myTEST  CDbOperate::OpenSql()  start..");
-	
+
 	try
 	{
-		//hr = m_pSqlCon->CreateInstance("ADODB.Connection"); //创建Connection对象
 		m_pSqlCon->Open(_T("mengHX"), FALSE, FALSE, _T("ODBC;UID=sa;PWD=xh6565911"));
-	
-		//m_pSqlCon->OpenEx(_T("DSN=mengHX;UID=sa;PWD=xh6565911"), CDatabase::noOdbcDialog); //这种连接方式，发现远程调试经常异常退出
-		//MessageBox(NULL, hr, "错误", MB_OK);
-     /*
-		if (SUCCEEDED(hr))
-		{
-			m_pSqlCon->Open(m_sqlAddr.GetBuffer(0), "", "", adModeUnknown);
- 		}
-		*/
 		OutputDebug("myTEST  CDbOperate::OpenSql()   end..");
-	
+
 		return true;
 	}
-	/*
-	catch (_com_error   e)
-	{
-		CString   errorMsg;
-		errorMsg.Format("连接数据库失败!\r\n错误信息:%s", e.ErrorMessage());
-		MessageBox(NULL,errorMsg, "错误", MB_OK);
-		return false;
-	}
-	*/
 	catch (_com_error   e)
 	{
 		CString   errorMsg;
@@ -78,16 +56,12 @@ bool CDbOperate::CloseSql()
 {
 	try
 	{
-		//if (m_pSqlCon->State)
-			m_pSqlCon->Close(); ///如果已经打开了连接则关闭它
+		m_pSqlCon->Close(); ///如果已经打开了连接则关闭它
 		return true;
 	}
 	catch (_com_error   e)
 	{
 		CString   errorMsg;
-		//下面的错误提示，在调试时可以打开，观察错误点
-	//	errorMsg.Format("数据库关闭失败!\r\n错误信息:%s", e.ErrorMessage());
-	//	MessageBox(NULL, errorMsg, "错误", MB_OK);
 		return false;
 	}
 }
@@ -125,10 +99,6 @@ bool CDbOperate::InsertSQLPayRecord(int deviceID, int EmpIDNUM)
 	catch (_com_error   e)
 	{
 		CString   errorMsg;
-		//下面的错误提示，在调试时可以打开，观察错误点
-		//	errorMsg.Format("MyQuerySQL数据库!\r\n错误信息:%s", e.ErrorMessage());
-		//	MessageBox(NULL, errorMsg, "错误", MB_OK);
-		//	return false;
 	}
 	OutputDebug("myTEST  InsertSQLPayRecord()   end..");
 	return false;
@@ -164,10 +134,6 @@ bool CDbOperate::nnInsertSQLPayRecord(int deviceID, int EmpIDNUM, unsigned char 
 	catch (_com_error   e)
 	{
 		CString   errorMsg;
-		//下面的错误提示，在调试时可以打开，观察错误点
-		//	errorMsg.Format("MyQuerySQL数据库!\r\n错误信息:%s", e.ErrorMessage());
-		//	MessageBox(NULL, errorMsg, "错误", MB_OK);
-		//	return false;
 	}
 	OutputDebug("myTEST  InsertSQLPayRecord()   end..");
 	return false;
@@ -192,11 +158,6 @@ bool CDbOperate::InsertSQLPayRecordCCC(int deviceID, int EmpIDNUM)
 	}
 	catch (_com_error   e)
 	{
-		CString   errorMsg;
-		//下面的错误提示，在调试时可以打开，观察错误点
-		//	errorMsg.Format("MyQuerySQL数据库!\r\n错误信息:%s", e.ErrorMessage());
-		//	MessageBox(NULL, errorMsg, "错误", MB_OK);
-		//	return false;
 	}
 	//	OutputDebug("myTEST  InsertSQLPayRecord()   end..");
 	return false;
@@ -235,44 +196,44 @@ bool CDbOperate::InsertSQLPayRecord2(int deviceID)
 }
 
 #ifdef DaoShenFlowmeter
-			//插入数据
-					bool CDbOperate::InsertSQLPayRecord_CANSHU(int deviceID, unsigned long tep1, unsigned long tep2, unsigned long tep3, unsigned long tep4, unsigned long tep5, unsigned long tep6)
-							{
+//插入数据
+bool CDbOperate::InsertSQLPayRecord_CANSHU(int deviceID, unsigned long tep1, unsigned long tep2, unsigned long tep3, unsigned long tep4, unsigned long tep5, unsigned long tep6)
+{
 
 
-									try
-									{
-										CString strTemp;
-										CString strSQL;
-										COleDateTime dt = COleDateTime::GetCurrentTime();
+	try
+	{
+		CString strTemp;
+		CString strSQL;
+		COleDateTime dt = COleDateTime::GetCurrentTime();
 
-										//	strSQL.Format("INSERT INTO stuTable(birth) VALUES('%s')", dt.Format("%Y-%m-%d %H:%M:%S"));
-										//自己修改字段名即可
-										//	strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", deviceID, EmpIDNUM);
-										//strTemp.Format("insert into Dbo.WK_SetState(SetID) values(%d)", deviceID);
-										strTemp.Format("Update Dbo.WK_SetState set state_1=%d,state_2=%d,state_3=%d,state_4=%d,state_5=%d,state_6=%d,BuildDate='%s' where SetID=%d", tep1, tep2, tep3, tep4, tep5, tep6, dt.Format("%Y-%m-%d %H:%M:%S"), deviceID);//注意字符串就用'%s',数字用%d
+		//	strSQL.Format("INSERT INTO stuTable(birth) VALUES('%s')", dt.Format("%Y-%m-%d %H:%M:%S"));
+		//自己修改字段名即可
+		//	strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", deviceID, EmpIDNUM);
+		//strTemp.Format("insert into Dbo.WK_SetState(SetID) values(%d)", deviceID);
+		strTemp.Format("Update Dbo.WK_SetState set state_1=%d,state_2=%d,state_3=%d,state_4=%d,state_5=%d,state_6=%d,BuildDate='%s' where SetID=%d", tep1, tep2, tep3, tep4, tep5, tep6, dt.Format("%Y-%m-%d %H:%M:%S"), deviceID);//注意字符串就用'%s',数字用%d
 
-										_bstr_t sql = strTemp.GetBuffer(0);
-										m_pSqlCon->ExecuteSQL(sql);
-										OutputDebug("myTEST  InsertSQLPayRecord2()   end..");
-										return true;
-									}
-									catch (_com_error   e)
-									{
-										CString   errorMsg;
-										//下面的错误提示，在调试时可以打开，观察错误点
-										//	errorMsg.Format("MyQuerySQL数据库!\r\n错误信息:%s", e.ErrorMessage());
-										//	MessageBox(NULL, errorMsg, "错误", MB_OK);
-										//	return false;
-									}
+		_bstr_t sql = strTemp.GetBuffer(0);
+		m_pSqlCon->ExecuteSQL(sql);
+		OutputDebug("myTEST  InsertSQLPayRecord2()   end..");
+		return true;
+	}
+	catch (_com_error   e)
+	{
+		CString   errorMsg;
+		//下面的错误提示，在调试时可以打开，观察错误点
+		//	errorMsg.Format("MyQuerySQL数据库!\r\n错误信息:%s", e.ErrorMessage());
+		//	MessageBox(NULL, errorMsg, "错误", MB_OK);
+		//	return false;
+	}
 
-								return false;
-							}
+	return false;
+}
 
 #endif
 
 //更新数据
-bool CDbOperate::UpdateSQL(int devID,int EmpIDNUM)
+bool CDbOperate::UpdateSQL(int devID, int EmpIDNUM)
 
 {
 	OutputDebug("myTEST  myOUTerr()  start..");
@@ -371,7 +332,7 @@ bool CDbOperate::UpdateSQLCCC(int devID, int EmpIDNUM)
 bool CDbOperate::myUpdateSQL(int ConOK)
 {
 	OutputDebug("myTEST  myUpdateSQL()  start..");
-	
+
 	try
 	{
 		CString strTemp;
@@ -395,7 +356,7 @@ bool CDbOperate::myUpdateSQL(int ConOK)
 	OutputDebug("myTEST  myUpdateSQL()   end..");
 	return false;
 }
-bool CDbOperate::my2UpdateSQL(int DevID,int ConOK)
+bool CDbOperate::my2UpdateSQL(int DevID, int ConOK)
 {
 	OutputDebug("myTEST  my2UpdateSQL()  start..");
 
@@ -458,7 +419,7 @@ bool CDbOperate::my3UpdateSQL(int DevID, unsigned int *mdata)
 	return false;
 }
 
-bool CDbOperate::myUpdateDown_DataSQL(int deviceID,unsigned int*Down_Data, unsigned int*CheckBox) //是可从入函数
+bool CDbOperate::myUpdateDown_DataSQL(int deviceID, unsigned int*Down_Data, unsigned int*CheckBox) //是可从入函数
 {
 	unsigned int bigDown_Data[15]; unsigned int bigCheckBox;
 	OutputDebug("myTEST  myUpdateDown_DataSQL()  start..");
@@ -549,7 +510,7 @@ void CDbOperate::QuerySQL()
 		//	return false;
 	}
 
-	if(pRecordset.IsBOF())
+	if (pRecordset.IsBOF())
 	{
 		return;
 	}
@@ -573,14 +534,14 @@ void CDbOperate::QuerySQL()
 	OutputDebug("myTEST  QuerySQL()   end..");
 }
 //查询示例---强烈注意里面有全局变量MyEmpID，本函数是非可重入函数。
-unsigned char CDbOperate:: MyQuerySQL(int deviceID)//强烈注意里面有全局变量MyEmpID，本函数是非可重入函数。
-{    
+unsigned char CDbOperate::MyQuerySQL(int deviceID)//强烈注意里面有全局变量MyEmpID，本函数是非可重入函数。
+{
 	unsigned long ii; _variant_t var;
 	OutputDebug("myTEST  1CDbOperate:: MyQuerySQL()  start..");
 
 	ii = 0;
 
-	
+
 	CRecordset  pRecordset(&m_db);
 	try
 	{
@@ -637,7 +598,7 @@ unsigned char CDbOperate:: MyQuerySQL(int deviceID)//强烈注意里面有全局变量MyEmp
 	}
 	OutputDebug("myTEST  2CDbOperate:: 2MyQuerySQL()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -649,8 +610,8 @@ sttt2:
 }
 #ifdef updataOnOffDTU
 //查询示例---强烈注意里面有全局变量
-int CDbOperate::MyQuerySQLconnectTime(void )//
-{   
+int CDbOperate::MyQuerySQLconnectTime(void)//
+{
 	unsigned long ii; _variant_t var; CString   olgTime;
 	CString   TEMP;
 	OutputDebug("myTEST  1CDbOperate:: MyQuerySQL()  start..");
@@ -664,14 +625,8 @@ int CDbOperate::MyQuerySQLconnectTime(void )//
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.Dev_NetState ");//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.Dev_NetState ");
+		_bstr_t sql = strData.GetBuffer(0);			
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -696,7 +651,7 @@ int CDbOperate::MyQuerySQLconnectTime(void )//
 		{
 			//循环读取每条记录
 			//	DWORD   dtu_id = pRecordset->GetCollect("EmpID");
-			
+
 			pRecordset.GetFieldValue("ID", TEMP);
 			pRecordset.GetFieldValue("ConnectDate", olgTime);
 
@@ -706,9 +661,9 @@ int CDbOperate::MyQuerySQLconnectTime(void )//
 			//pRecordset.GetFieldValue("EmpID", TEMP);
 			//MyEmpID = atoi(TEMP);
 
-				CDbOperate::devTimeMap[devNo] = olgTime;
-				//CDbOperate::devTimeMap.insert((devNo, olgTime));
-	
+			CDbOperate::devTimeMap[devNo] = olgTime;
+			//CDbOperate::devTimeMap.insert((devNo, olgTime));
+
 			ii++;
 			pRecordset.MoveNext();
 		}
@@ -721,7 +676,7 @@ int CDbOperate::MyQuerySQLconnectTime(void )//
 	//OutputDebug("myTEST  2CDbOperate:: 2MyQuerySQL()   end..");
 sttt2:
 
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -780,14 +735,9 @@ unsigned char CDbOperate::nnMyQuerySQL(int deviceID, int * PnnMyEmpID, unsigned 
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
+		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);
 
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -826,7 +776,6 @@ unsigned char CDbOperate::nnMyQuerySQL(int deviceID, int * PnnMyEmpID, unsigned 
 			ii++;
 			pRecordset.MoveNext();
 		}
-		//	pRecordset->Close();
 	}
 	catch (_com_error *e)
 	{
@@ -834,7 +783,7 @@ unsigned char CDbOperate::nnMyQuerySQL(int deviceID, int * PnnMyEmpID, unsigned 
 	}
 	OutputDebug("myTEST  2CDbOperate:: 2MyQuerySQL()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -847,7 +796,7 @@ sttt2:
 //---查询一下设备是否有人再使用，也就是流水EmpID是否不为0，为0就是没人使用。
 unsigned char CDbOperate::MyQuerySQL3(int deviceID)//---查询一下设备是否有人再使用，也就是流水EmpID是否不为0，为0就是没人使用。
 {
-	unsigned long ii; _variant_t var; int jj = 0;			
+	unsigned long ii; _variant_t var; int jj = 0;
 	OutputDebug("myTEST  CDbOperate:: MyQuerySQL3()  start..");
 
 	ii = 0; jj = 0;
@@ -856,15 +805,8 @@ unsigned char CDbOperate::MyQuerySQL3(int deviceID)//---查询一下设备是否有人再使
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-																					 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -902,7 +844,7 @@ unsigned char CDbOperate::MyQuerySQL3(int deviceID)//---查询一下设备是否有人再使
 	}
 	OutputDebug("myTEST  CDbOperate:: MyQuerySQL3()   end..");
 sttt2:
-	if (jj>0)
+	if (jj > 0)
 	{
 		return 1;
 	}
@@ -915,7 +857,7 @@ sttt2:
 //查询示例BB
 unsigned char CDbOperate::MyQuerySQLBB(int deviceID)
 {
-	
+
 	unsigned long ii; _variant_t var;
 	OutputDebug("myTEST  3CDbOperate:: MyQuerySQL()  start..");
 
@@ -925,15 +867,8 @@ unsigned char CDbOperate::MyQuerySQLBB(int deviceID)
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-																					 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.Dev_NetState where SetID = %d", deviceID);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -969,7 +904,7 @@ unsigned char CDbOperate::MyQuerySQLBB(int deviceID)
 	}
 	OutputDebug("myTEST  4CDbOperate:: MyQuerySQL()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -989,15 +924,8 @@ unsigned char CDbOperate::MyQuerySQLCC(int deviceID)
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.Dev_UseState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					 //	strData.Format("select *  from dbo.Dev_NetState ");
-																					 //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					 //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					 //	_bstr_t sql = strData.GetBuffer(0);
-
-																					 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.Dev_UseState where SetID = %d", deviceID);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -1033,7 +961,7 @@ unsigned char CDbOperate::MyQuerySQLCC(int deviceID)
 	}
 	OutputDebug("myTEST  6CDbOperate:: MyQuerySQL()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -1045,7 +973,7 @@ sttt2:
 }
 unsigned char CDbOperate::MyQuerySQL2(int deviceID)
 {
-	
+
 	unsigned long ii; _variant_t var;
 	OutputDebug("myTEST  MyQuerySQL2()  start..");
 
@@ -1055,7 +983,7 @@ unsigned char CDbOperate::MyQuerySQL2(int deviceID)
 	{
 		CString strData;
 		strData.Format("select *  from Dbo.WK_SetState where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		_bstr_t sql = strData.GetBuffer(0);	
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -1090,7 +1018,7 @@ unsigned char CDbOperate::MyQuerySQL2(int deviceID)
 	}
 	OutputDebug("myTEST  MyQuerySQL2()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -1102,7 +1030,7 @@ sttt2:
 }
 
 //查询设置的参数是哪些，-本函数是可重入函数。
-unsigned char CDbOperate::MyQueryDown_DataSQL(int deviceID,unsigned int*Down_Data,unsigned int*CheckBox)
+unsigned char CDbOperate::MyQueryDown_DataSQL(int deviceID, unsigned int*Down_Data, unsigned int*CheckBox)
 {
 	unsigned long ii; _variant_t var; unsigned long tempDD;
 	OutputDebug("myTEST  CDbOperate:: MyQueryDown_DataSQL()  start..");
@@ -1113,15 +1041,8 @@ unsigned char CDbOperate::MyQueryDown_DataSQL(int deviceID,unsigned int*Down_Dat
 	{
 
 		CString strData;
-		strData.Format("select *  from dbo.WK_SetDownData where SetID = %d", deviceID);//注意字符串就用'%s',数字用%d
-																					   //	strData.Format("select *  from dbo.Dev_NetState ");
-																					   //_bstr_t CommandText = "select *  from dbo.Dev_NetState where SetID='%s'",deviceID;
-
-																					   //strTemp.Format("insert into dbo.Dev_NetState(SetID,EmpID) values(%d,%d)", id, deviceID);
-																					   //	_bstr_t sql = strData.GetBuffer(0);
-
-																					   //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
-		_bstr_t sql = strData.GetBuffer(0);																			 //	pRecordset->Open(sql, m_pSqlCon.GetInterfacePtr(),adOpenDynamic, adLockOptimistic, adCmdText);
+		strData.Format("select *  from dbo.WK_SetDownData where SetID = %d", deviceID);
+		_bstr_t sql = strData.GetBuffer(0);
 		pRecordset.Open(CRecordset::dynamic, sql);
 	}
 	catch (_com_error   e)
@@ -1298,7 +1219,7 @@ unsigned char CDbOperate::MyQueryDown_DataSQL(int deviceID,unsigned int*Down_Dat
 	}
 	OutputDebug("myTEST  CDbOperate:: MyQueryDown_DataSQL()   end..");
 sttt2:
-	if (ii>0)
+	if (ii > 0)
 	{
 		return 1;
 	}
@@ -1309,7 +1230,7 @@ sttt2:
 
 }
 
-bool CDbOperate::InsertAccessState(int dtu_id,bool online)
+bool CDbOperate::InsertAccessState(int dtu_id, bool online)
 {
 	return true;
 }

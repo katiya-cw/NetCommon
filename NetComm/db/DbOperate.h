@@ -1,13 +1,9 @@
 #pragma once
 #include "stdafx.h"
-//#include <afxdb.h>
 #include <afxdb.h>
 
 #include<map>
 #include<string>
-
-
-
 
 struct USER_INFO
 {
@@ -90,7 +86,5 @@ private:
 	//ODBCÁ¬½Ó
 	CDatabase m_db;
 	CDatabase* m_pSqlCon;
-
-	// map<unsigned long, CString>   devTimeMap;
 };
 

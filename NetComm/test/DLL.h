@@ -322,23 +322,33 @@ typedef int (FAR PASCAL *MYregMYdevice)(void);
 
 bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn, BYTE* pData, int nDataLen)
 {
-	unsigned long ttemp, gg, ttemp1, ttemp2;int i;
-	CString  mm[32];double dtemp; unsigned char MYbb[32];
-	unsigned char tem; CString str; CString getTIME; const char * MYmd5val; Ccommon md5Class; CString str2;
+	unsigned long ttemp, gg, ttemp1, ttemp2;
+	int i;
+	CString  mm[32];
+	double dtemp; 
+	unsigned char MYbb[32];
+	unsigned char tem; 
+	CString str; CString getTIME; 
+	const char * MYmd5val; 
+	Ccommon md5Class; 
+	CString str2;
 	CDeviceEvent Devent;  long tem3 = 0; float tem4;
 	unsigned int Down_Data[30];
 	unsigned int CheckBox[2];
 
 	extern CDbOperate SqlOPP2;
 
-	int MM, NN;long ee;
+	int MM, NN;
+	long ee;
 	OutputDebug("myTEST  callBack_GetDataFunction()  start..");
 	memset(MYbb, 0, 32);//发送前先清空接收缓冲区       //X 不可重入性
 
 	myREVflag = 1;                                       //X 不可重入性
-	mynDut_ID = nDut_ID;mynMeter_ID = nMeter_ID;ee = tCommn;  //X 不可重入性
+	mynDut_ID = nDut_ID;
+	mynMeter_ID = nMeter_ID;
+	ee = tCommn;
 
-	memcpy(MYbb, pData, 32);  //注意memcpy（）是不可重入函数   //X 不可重入性
+	memcpy(MYbb, pData, 32); 
 
 //判断是否为返回的确认码
 #ifdef NewFaction
@@ -359,11 +369,11 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 	if (MYbb[3] == 0x04) //判断是否是确认码
 	{
 		//通过ID来置事件,需要判断数据--（下面是通知相应的事件，让对应于每个设备的等待线程停止工作）					
-		HANDLE hEvent = Devent.GetEvent(mynDut_ID); //X 不可重入性
+		HANDLE hEvent = Devent.GetEvent(mynDut_ID); 
 		OutputDebug("myTEST907  dtu_id:%d.", mynDut_ID);
 		if (hEvent != NULL)
 		{
-			SetEvent(hEvent);   //X 不可重入性
+			SetEvent(hEvent);   
 		}
 		if (hEvent)
 		{

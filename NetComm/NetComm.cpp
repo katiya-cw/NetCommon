@@ -158,62 +158,6 @@ int tcpreceive(SOCKET s,char *pchbuf,int nsize,int ntimeoverSec)
 
 BOOL GetModelFromRes(char* strFileName)
 {
-/*	HRSRC hRes; 
-	HINSTANCE hInst = AfxGetResourceHandle(); 
-	BOOL bResult = FALSE; 
-	
-	DWORD dwLen=0; 
-	
-	hRes = FindResource(hInst,MAKEINTRESOURCE(IDR_HTML_MAP),"HTML"); 
-	if(hRes != NULL) 
-	{
-		dwLen = SizeofResource(hInst,hRes); 
-		if(dwLen > 0) 
-		{
-			HGLOBAL hGlob = LoadResource(hInst,hRes); 
-			if(hGlob != NULL) 
-			{
-				LPVOID lpData = LockResource(hGlob); 
-				
-				if(lpData != NULL) 
-				{
-					CFile   f; 
-					if(f.Open(strFileName,CFile::modeCreate|CFile::modeWrite)) 
-					{
-						f.WriteHuge(lpData,dwLen); 
-						f.Close(); 
-						bResult=TRUE; 
-					}
-					else
-					{
-						AfxMessageBox("写入资源错误.");
-					}
-				} 
-				else
-				{
-					AfxMessageBox("读取资源数据错误.");
-				}
-				
-				FreeResource(hGlob); 
-			} 
-			else
-			{
-				AfxMessageBox("获取资源错误.");
-			}
-		} 
-		else
-		{
-			AfxMessageBox("资源大小错误.");
-		}
-	} 
-	else
-	{
-		AfxMessageBox("未找到资源.");
-		int d = GetLastError();		
-	}
-	
-	return bResult;
-	*/
 	return TRUE;
 }
 
@@ -959,39 +903,6 @@ START:
 					}
 				}
 			}
-/*			else if(nType == 0x68)//GetData meter
-			{
-				nLen = tcpreceive(g_GetData.sSocket,(char* )buff,4,900);//长度
-				if(nLen == 4)
-				{
-					int len = 0;
-					memcpy(&len,&buff[0],4);
-
-					if(len == sizeof(_DATA_METER))
-					{
-						nLen = tcpreceive(g_GetData.sSocket,(char* )buff,sizeof(_DATA_METER),900);
-						if(nLen == sizeof(_DATA_METER))
-						{
-							_DATA_METER data = {0};
-							
-							memcpy(&data,&buff[0],nLen);
-
-// 							OutputDebug("编号 = %d 已用电量 = %d 剩余电量 = %d 已用钱 %d  剩余钱 %d 单价 %d 流量 %d 瞬间流量 %d",
-// 								data.nID,data.nUedE,data.nLeftE,data.nUsedM,data.nLeftM,data.nRate,data.nFlow,data.nFlow2);
-							CTime t(data.lTime);
-							OutputDebug("DTU = %d ID = %d Time = %s(long = %d)",data.nDTU_ID,data.nID,t.Format("%Y-%m-%d %H:%M:%S"),data.lTime);
-							callGetBack(&data);
-
-
-							dwLastRecv = GetTickCount();
-						}
-					}
-				}
-				else if(nLen == -1)//断开
-				{
-					break;
-				}
-			}*/
 			else if(nType == 9)//校时
 			{
 				nLen = tcpreceive(g_GetData.sSocket,(char* )buff,4,100);
