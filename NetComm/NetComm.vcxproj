@@ -218,7 +218,6 @@
     <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
     <ClInclude Include="test\testDlg.h" />
-    <ClInclude Include="test\typelib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\DbOperate.cpp">
