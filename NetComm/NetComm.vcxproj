@@ -198,7 +198,6 @@
     <ClInclude Include="..\MyDefine.h" />
     <ClInclude Include="db\DbOperate.h" />
     <ClInclude Include="DeviceEvent.h" />
-    <ClInclude Include="HttpClient.h" />
     <ClInclude Include="httpserver.h" />
     <ClInclude Include="Http\EventLoopManager.h" />
     <ClInclude Include="Http\HttpClient.h" />
@@ -218,21 +217,6 @@
     <ClInclude Include="TcpServer\ConnectManager.h" />
     <ClInclude Include="TcpServer\MyConnectionA.h" />
     <ClInclude Include="test\DLL.h" />
-    <ClInclude Include="test\MUR500USB.h" />
-    <ClInclude Include="test\mur500_old.h" />
-    <ClInclude Include="test\mysql.h" />
-    <ClInclude Include="test\mySqlINCHUDE\mysql.h" />
-    <ClInclude Include="test\mySqlINCHUDE\mysql_com.h" />
-    <ClInclude Include="test\mySqlINCHUDE\mysql_time.h" />
-    <ClInclude Include="test\mySqlINCHUDE\mysql_version.h" />
-    <ClInclude Include="test\mySqlINCHUDE\my_alloc.h" />
-    <ClInclude Include="test\mySqlINCHUDE\my_list.h" />
-    <ClInclude Include="test\mySqlINCHUDE\typelib.h" />
-    <ClInclude Include="test\mysql_com.h" />
-    <ClInclude Include="test\mysql_time.h" />
-    <ClInclude Include="test\mysql_version.h" />
-    <ClInclude Include="test\my_alloc.h" />
-    <ClInclude Include="test\my_list.h" />
     <ClInclude Include="test\testDlg.h" />
     <ClInclude Include="test\typelib.h" />
   </ItemGroup>
@@ -273,11 +257,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\NetComm.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="test\libmysql.lib" />
-    <Library Include="test\MUR500USB.lib" />
-    <Library Include="test\WS2_32.LIB" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,12 +2,8 @@
 //
 
 #include "stdafx.h"
-//#include "test.h"
 #include "testDlg.h"
-#include "MUR500USB.h"
 #include "DLL.h"
-//#include "VspdCTOMySQL.h"
-//#include "../resource.h"
 #include "../../MyDefine.h"
 
 
@@ -32,29 +28,15 @@ int pascal NetSendMyData(int DtuID, unsigned char MepID, unsigned char *pData, i
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-_ConnectionPtr  m_pConnection; 
+_ConnectionPtr  m_pConnection;
 CString str23;
 CString str24;
-int tempmy=0;
-_RecordsetPtr   m_pRecordset; 
-_RecordsetPtr   m_pRecordset1; 
-_RecordsetPtr   m_pRecordset2; 
-_RecordsetPtr   m_pRecordset3; 
+int tempmy = 0;
+_RecordsetPtr   m_pRecordset;
+_RecordsetPtr   m_pRecordset1;
+_RecordsetPtr   m_pRecordset2;
+_RecordsetPtr   m_pRecordset3;
 
-unsigned char ttemp189;
-	// char* host="MYSQL服务器IP";
-	char* host="127.0.0.1";
-  //  char* host="101.200.204.188";
-    char* user="root";
-    char* port ="3306";//端口没有关系，函数内部不做任何
-    //char* passwd="用户密码";
-	 char* passwd="";
-   // char* dbname="数据库名称"; 
-	char* dbname="mydtu"; 
-    char* charset = "GBK";//支持中文
-    char* Msg = "";//消息变量
-//	 VspdCToMySQL * vspdctomysql = new VspdCToMySQL;
-	 extern  CString mystingtemp[1000];
 /////////////////////////////////////////////////////////////////////////////
 // CAboutDlg dialog used for App About
 
@@ -63,14 +45,14 @@ class CAboutDlg : public CDialog
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+	// Dialog Data
+		//{{AFX_DATA(CAboutDlg)
 	enum { IDD = IDD_ABOUTBOX };
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CAboutDlg)
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
 
@@ -80,8 +62,6 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-//	afx_msg void OnTimer(UINT_PTR nIDEvent);
-//	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
@@ -178,135 +158,84 @@ BOOL CTestDlg::OnInitDialog()
 	//  when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
-	
+
 	// TODO: Add extra initialization here
-	
-	
-unsigned long ttemp, gg,ttemp1,ttemp2;
- CString  mm;double dtemp;
 
-//SetTimer(2,60000,NULL); //单位是毫秒
+	unsigned long ttemp, gg, ttemp1, ttemp2;
+	CString  mm;double dtemp;
 
-
-//CString dmm="122.114.55.116";
+	//CString dmm="122.114.55.116";
 #ifdef GaiDongIPaddress
-	 CString dmm = "127.0.0.1";
+	CString dmm = "127.0.0.1";
 #else
- CString dmm = "101.200.204.188";
+	CString dmm = "101.200.204.188";
 #endif
-	
-SetDlgItemText(IDC_EDIT1,dmm);
-gg=8001;
-    dmm.Format("%d",gg);
-SetDlgItemText(IDC_EDIT3,dmm);
 
+	SetDlgItemText(IDC_EDIT1, dmm);
+	gg = 8001;
+	dmm.Format("%d", gg);
+	SetDlgItemText(IDC_EDIT3, dmm);
 
-    gg=99;
-    mm.Format("%d",gg);
-    SetDlgItemText(IDC_EDIT4,mm);
-	
-     gg=1;
-    mm.Format("%d",gg);
-    SetDlgItemText(IDC_EDIT5,mm);
+	gg = 99;
+	mm.Format("%d", gg);
+	SetDlgItemText(IDC_EDIT4, mm);
 
-     gg=1;
-    mm.Format("%d",gg);
-    SetDlgItemText(IDC_EDIT7,mm);
+	gg = 1;
+	mm.Format("%d", gg);
+	SetDlgItemText(IDC_EDIT5, mm);
 
-	dtemp=68.54;
-    mm.Format("%f",dtemp);
-    SetDlgItemText(IDC_EDIT6,mm);
+	gg = 1;
+	mm.Format("%d", gg);
+	SetDlgItemText(IDC_EDIT7, mm);
 
-int i = 0; unsigned char mybuf[32];
-char * Ip = "122.114.55.116";
- int Comm = 2000;
-//数据库连接-----------START---------
+	dtemp = 68.54;
+	mm.Format("%f", dtemp);
+	SetDlgItemText(IDC_EDIT6, mm);
 
+	int i = 0; unsigned char mybuf[32];
+	char * Ip = "122.114.55.116";
+	int Comm = 2000;
 
-   
+	CString tt1;
+	GetDlgItemText(IDC_EDIT3, tt1);
+	Comm = atol(tt1);
+	GetDlgItemText(IDC_EDIT1, tt1);
+	//	Ip=atol(tt1);
+	Ip = (LPSTR)(LPCSTR)tt1;
 
- //数据库链接-----------END-------
- //----------------开始连接------START----------
+	//CALL_BACK_GET_DATA
+	CALL_BACK_GET_DATA callBack_GetData;
+	CALL_BACK_EXCUTE  callBack_EXCUTE;
+	CALL_BACK_GET_DATA_GPRS callBack_GPRS;
+	CALL_BACK_SHUTDOWN callBack_ShutDown;
 
+	callBack_GetData = callBack_GetDataFunction;
+	callBack_EXCUTE = callBack_EXCUTEFunction;
+	callBack_ShutDown = callBack_ShutDownFunction;
+	callBack_GPRS = callBack_GPRSFunction;
 
+	UpdateData(true);
+	try
+	{
+		i = exNetComm(Ip, Comm, callBack_GetData, callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
+	}
+	catch (_com_error *e)
+	{
 
- CString tt1;
- GetDlgItemText(IDC_EDIT3, tt1);
- Comm = atol(tt1);
- GetDlgItemText(IDC_EDIT1, tt1);
- //	Ip=atol(tt1);
- Ip = (LPSTR)(LPCSTR)tt1;
+	}
+	UpdateData(false);
 
- //数据库连接-----------START---------
-
- /*
- if (vspdctomysql->ConnMySQL(host, port, dbname, user, passwd, charset, Msg) == 0)
- {
-	  //  AfxMessageBox("MYSQL数据库连接成功");
- }
- else
- {
-	  //  AfxMessageBox(Msg);
- }
- */
-
- //数据库链接-----------END-------
-
-
- //SetTimer(1, 500, NULL); //单位是毫秒
-
-						 //CALL_BACK_GET_DATA
- CALL_BACK_GET_DATA callBack_GetData;
- CALL_BACK_EXCUTE  callBack_EXCUTE;
- CALL_BACK_GET_DATA_GPRS callBack_GPRS;
- CALL_BACK_SHUTDOWN callBack_ShutDown;
-
- callBack_GetData = callBack_GetDataFunction;
- callBack_EXCUTE = callBack_EXCUTEFunction;
- callBack_ShutDown = callBack_ShutDownFunction;
- callBack_GPRS = callBack_GPRSFunction;
-
- UpdateData(true);
- //start run your function
-// int mm = 5;
- //i = exNmyfction(mm);
-
-// mm = 8;
-
-// i = exregMYdevice();
- // i = exNetComm(Ip, Comm, callBack_GetData,callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
-
-
-
- try
- {
-
-	 i = exNetComm(Ip, Comm, callBack_GetData, callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
- }
- catch (_com_error *e)
- {
-
- }
- UpdateData(false);
- //FreeLibrary(hdll);
-
- if (i == 0)
- {
-	 // timer1.Enabled = false;
-	// MessageBox("已经上线");
- }
- else
- {
-	 // timer1.Enabled = true;
-	 // toolStripStatusLink.Text = "掉线....请重连";
-	 MessageBox("掉线....请重连或者检查服务器是否打开?");
- }
-
-
-
-
-
-
+	if (i == 0)
+	{
+		// timer1.Enabled = false;
+	   // MessageBox("已经上线");
+	}
+	else
+	{
+		// timer1.Enabled = true;
+		// toolStripStatusLink.Text = "掉线....请重连";
+		MessageBox("掉线....请重连或者检查服务器是否打开?");
+	}
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -327,13 +256,13 @@ void CTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
 
-void CTestDlg::OnPaint() 
+void CTestDlg::OnPaint()
 {
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // device context for painting
 
-		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
+		SendMessage(WM_ICONERASEBKGND, (WPARAM)dc.GetSafeHdc(), 0);
 
 		// Center icon in client rectangle
 		int cxIcon = GetSystemMetrics(SM_CXICON);
@@ -356,13 +285,13 @@ void CTestDlg::OnPaint()
 //  the minimized window.
 HCURSOR CTestDlg::OnQueryDragIcon()
 {
-	return (HCURSOR) m_hIcon;
+	return (HCURSOR)m_hIcon;
 }
 
-void CTestDlg::OnOK() 
+void CTestDlg::OnOK()
 {
 	// TODO: Add extra validation here
-	
+
 //	CDialog::OnOK();
 }
 
@@ -373,118 +302,119 @@ void CTestDlg::OnOK()
 
 
 
-void CTestDlg::OnButton1() 
-{int i = 0; unsigned char mybuf[32];
-char * Ip ;
- int Comm ;
+void CTestDlg::OnButton1()
+{
+	int i = 0; unsigned char mybuf[32];
+	char * Ip;
+	int Comm;
 
-CString tt1;
-  GetDlgItemText(IDC_EDIT3,tt1);
-	Comm=atol(tt1);
- GetDlgItemText(IDC_EDIT1,tt1);
-//	Ip=atol(tt1);
- Ip=(LPSTR)(LPCSTR)tt1;
+	CString tt1;
+	GetDlgItemText(IDC_EDIT3, tt1);
+	Comm = atol(tt1);
+	GetDlgItemText(IDC_EDIT1, tt1);
+	//	Ip=atol(tt1);
+	Ip = (LPSTR)(LPCSTR)tt1;
 
-//数据库连接-----------START---------
-
-
-    //初始化
-
- /*
- if (vspdctomysql->ConnMySQL(host, port, dbname, user, passwd, charset, Msg) == 0)
- {
-	 //   AfxMessageBox("MYSQL数据库连接成功");
- }
-    else
-	{
-        //   AfxMessageBox(Msg);
-	}
- */
+	//数据库连接-----------START---------
 
 
- //数据库链接-----------END-------
+		//初始化
 
-//memset(MYbb,0,32);//发送前先清空接收缓冲区
-// SetTimer(1,500,NULL); //单位是毫秒
+	 /*
+	 if (vspdctomysql->ConnMySQL(host, port, dbname, user, passwd, charset, Msg) == 0)
+	 {
+		 //   AfxMessageBox("MYSQL数据库连接成功");
+	 }
+		else
+		{
+			//   AfxMessageBox(Msg);
+		}
+	 */
 
-//CALL_BACK_GET_DATA
-  CALL_BACK_GET_DATA callBack_GetData;
-  CALL_BACK_EXCUTE  callBack_EXCUTE;
-  CALL_BACK_GET_DATA_GPRS callBack_GPRS;
-  CALL_BACK_SHUTDOWN callBack_ShutDown;
 
-  callBack_GetData = callBack_GetDataFunction;
-  callBack_EXCUTE = callBack_EXCUTEFunction; 
-  callBack_ShutDown = callBack_ShutDownFunction;
-  callBack_GPRS = callBack_GPRSFunction;
+	 //数据库链接-----------END-------
+
+	//memset(MYbb,0,32);//发送前先清空接收缓冲区
+	// SetTimer(1,500,NULL); //单位是毫秒
+
+	//CALL_BACK_GET_DATA
+	CALL_BACK_GET_DATA callBack_GetData;
+	CALL_BACK_EXCUTE  callBack_EXCUTE;
+	CALL_BACK_GET_DATA_GPRS callBack_GPRS;
+	CALL_BACK_SHUTDOWN callBack_ShutDown;
+
+	callBack_GetData = callBack_GetDataFunction;
+	callBack_EXCUTE = callBack_EXCUTEFunction;
+	callBack_ShutDown = callBack_ShutDownFunction;
+	callBack_GPRS = callBack_GPRSFunction;
 #if 0 //pj
-HINSTANCE hdll; 
+	HINSTANCE hdll;
 
-MyNetComm exNetComm;
-Nmyfction exNmyfction;
-MYNetSendMyData exNetSendMyData;
-MYDownLoadFile  exDownLoadFile;
-MYregMYdevice exregMYdevice;
-
-
-hdll=LoadLibrary("NetComm.dll ");
-if(hdll!=NULL)
-{
-exNetComm=(MyNetComm)GetProcAddress(hdll,"NetComm");
-exNmyfction=(Nmyfction)GetProcAddress(hdll,"myfction");
-exNetSendMyData=(MYNetSendMyData)GetProcAddress(hdll,"NetSendMyData");
-
-exDownLoadFile=(MYDownLoadFile)GetProcAddress(hdll,"DownLoadFile");
-exregMYdevice=(MYregMYdevice)GetProcAddress(hdll,"regMYdevice");
-}
-else
-{
-AfxMessageBox("无法加载DLL---NetComm.dll");
-return;
+	MyNetComm exNetComm;
+	Nmyfction exNmyfction;
+	MYNetSendMyData exNetSendMyData;
+	MYDownLoadFile  exDownLoadFile;
+	MYregMYdevice exregMYdevice;
 
 
-}
+	hdll = LoadLibrary("NetComm.dll ");
+	if (hdll != NULL)
+	{
+		exNetComm = (MyNetComm)GetProcAddress(hdll, "NetComm");
+		exNmyfction = (Nmyfction)GetProcAddress(hdll, "myfction");
+		exNetSendMyData = (MYNetSendMyData)GetProcAddress(hdll, "NetSendMyData");
+
+		exDownLoadFile = (MYDownLoadFile)GetProcAddress(hdll, "DownLoadFile");
+		exregMYdevice = (MYregMYdevice)GetProcAddress(hdll, "regMYdevice");
+	}
+	else
+	{
+		AfxMessageBox("无法加载DLL---NetComm.dll");
+		return;
+
+
+	}
 #endif
-UpdateData(true);
-//start run your function
- int mm=5;
-i=exNmyfction(mm);
+	UpdateData(true);
+	//start run your function
+	int mm = 5;
+	i = exNmyfction(mm);
 
-mm=8;
+	mm = 8;
 
-i=exregMYdevice();
- // i = exNetComm(Ip, Comm, callBack_GetData,callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
+	i = exregMYdevice();
+	// i = exNetComm(Ip, Comm, callBack_GetData,callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
 
 
 
-            try
-            {
+	try
+	{
 
-  i = exNetComm(Ip, Comm, callBack_GetData,callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
-            }
-            catch(_com_error *e) 
-            {
+		i = exNetComm(Ip, Comm, callBack_GetData, callBack_GPRS, callBack_EXCUTE, callBack_ShutDown);
+	}
+	catch (_com_error *e)
+	{
 
-            }
-UpdateData(false);
-//FreeLibrary(hdll);
+}
+	UpdateData(false);
+	//FreeLibrary(hdll);
 
-            if (i == 0)
-            {
-               // timer1.Enabled = false;
-                	MessageBox("已经上线"); 
-            }
-            else
-            {
-               // timer1.Enabled = true;
-               // toolStripStatusLink.Text = "掉线....请重连";
-				MessageBox("掉线....请重连或者检查服务器是否打开?"); 
-            }
+	if (i == 0)
+	{
+		// timer1.Enabled = false;
+		MessageBox("已经上线");
+	}
+	else
+	{
+		// timer1.Enabled = true;
+		// toolStripStatusLink.Text = "掉线....请重连";
+		MessageBox("掉线....请重连或者检查服务器是否打开?");
+	}
 
-         //   memset(mybuf,11,32);
+	//   memset(mybuf,11,32);
 
-           //i = exNetSendMyData(19,1,mybuf,32);
-         
+	  //i = exNetSendMyData(19,1,mybuf,32);
+
 
 //FreeLibrary(hdll);
 
@@ -495,54 +425,55 @@ UpdateData(false);
 
 
 
-void CTestDlg::OnButton2() 
+void CTestDlg::OnButton2()
 {
 	// TODO: Add your control notification handler code here
-unsigned long ttemp, gg,ttemp1,ttemp2;
- CString  mm;double dtemp;int i;
-//memset(MYbb,0,32);
- UpdateData(true);
+	unsigned long ttemp, gg, ttemp1, ttemp2;
+	CString  mm;double dtemp;int i;
+	//memset(MYbb,0,32);
+	UpdateData(true);
 
- for(i=0;i<10;i++)
- {
-//mm.Format("%d",MYbb[i]);
-    m_DISPLY+=mm;
-	m_DISPLY+="-";
-mm="";
- }
-m_DISPLY+="\n";m_DISPLY+="\n";
- for(i=10;i<20;i++)
- {
-//mm.Format("%d",MYbb[i]);
-    m_DISPLY+=mm;m_DISPLY+="-";
-mm="";
- }
-m_DISPLY+="\n";
-m_DISPLY+="\n";
+	for (i = 0;i < 10;i++)
+	{
+		//mm.Format("%d",MYbb[i]);
+		m_DISPLY += mm;
+		m_DISPLY += "-";
+		mm = "";
+	}
+	m_DISPLY += "\n";m_DISPLY += "\n";
+	for (i = 10;i < 20;i++)
+	{
+		//mm.Format("%d",MYbb[i]);
+		m_DISPLY += mm;m_DISPLY += "-";
+		mm = "";
+	}
+	m_DISPLY += "\n";
+	m_DISPLY += "\n";
 
- for(i=20;i<32;i++)
- {
-//mm.Format("%d",MYbb[i]);
-    m_DISPLY+=mm;m_DISPLY+="-";
-mm="";
- }
-m_DISPLY+="\n";m_DISPLY+="\n";
+	for (i = 20;i < 32;i++)
+	{
+		//mm.Format("%d",MYbb[i]);
+		m_DISPLY += mm;m_DISPLY += "-";
+		mm = "";
+	}
+	m_DISPLY += "\n";m_DISPLY += "\n";
 
 
 
- UpdateData(false);
-   SetDlgItemText(IDC_EDIT2,mm);
+	UpdateData(false);
+	SetDlgItemText(IDC_EDIT2, mm);
 }
 
-void CTestDlg::OnButton3() 
+void CTestDlg::OnButton3()
 {
-	
+
 }
 
-void CTestDlg::OnButton4() 
-{  unsigned int Down_Data[30];
-   unsigned int CheckBox[2];
-	int i; 
+void CTestDlg::OnButton4()
+{
+	unsigned int Down_Data[30];
+	unsigned int CheckBox[2];
+	int i;
 	for (i = 0; i < 30; i++)
 	{
 		Down_Data[i] = i;
@@ -570,82 +501,57 @@ void CTestDlg::OnButton4()
 	SqlOPP.CloseSql();
 	::CoUninitialize();//反初始化COM库
 
-	
+
 
 
 
 }
 
-void CTestDlg::OnButton5() 
+void CTestDlg::OnButton5()
 {
 
 }
 
 
 
-void CTestDlg::OnButton6() 
+void CTestDlg::OnButton6()
 {
 
-	
+
 }
 
 void CTestDlg::OnButton8()
 {
 }
 
-void CTestDlg::OnButton9() 
-{
-	
-
-}
-
-void CTestDlg::OnButton7() 
+void CTestDlg::OnButton9()
 {
 
+
 }
 
-void CTestDlg::OnButton10() 
+void CTestDlg::OnButton7()
+{
+
+}
+
+void CTestDlg::OnButton10()
 {
 }
 
-void CTestDlg::OnButton11() 
-{ 
+void CTestDlg::OnButton11()
+{
 }
 
-void CTestDlg::OnButton12() 
+void CTestDlg::OnButton12()
 {
 	int i = 0; unsigned char mybuf[32];
 
 	unsigned long ttemp, ttemp1, ttemp2, ttemp3;
 	CString  tt1;
-//	memset(MYbb, 0, 32);//发送前先清空接收缓冲区
-#if 0 //pj
-	HINSTANCE hdll;
-
-	MyNetComm exNetComm;
-	Nmyfction exNmyfction;
-	MYNetSendMyDataTrue exNetSendMyDataTrue;
-
-	hdll = LoadLibrary("NetComm.dll ");
-	if (hdll != NULL)
-	{
-
-		exNetSendMyDataTrue = (MYNetSendMyDataTrue)GetProcAddress(hdll, "NetSendMyDataTrue");
-
-	}
-	else
-	{
-		AfxMessageBox("无法加载DLL---NetComm.dll");
-		return;
-
-
-	}
-#endif
+	//	memset(MYbb, 0, 32);//发送前先清空接收缓冲区
 	UpdateData(true);
 	//start run your function
-
-
-
 
 	memset(mybuf, 11, 32);
 
@@ -655,7 +561,7 @@ void CTestDlg::OnButton12()
 		ttemp2 = atol(tt1);
 
 		GetDlgItemText(IDC_EDIT5, tt1);
-		ttemp189 = atol(tt1);
+		long ttemp189 = atol(tt1);
 
 		GetDlgItemText(IDC_EDIT7, tt1);
 		ttemp3 = atol(tt1);
@@ -666,8 +572,6 @@ void CTestDlg::OnButton12()
 		float  ttemp88;
 		ttemp88 = atof(tt1); ttemp1 = ttemp88 * 100;
 
-
-
 		myREVflag = 0;//判断什么时候接收到数据，就置1
 
 
@@ -676,8 +580,6 @@ void CTestDlg::OnButton12()
 		if (i == 45)//f发送成功
 		{
 		}
-
-
 	}
 	catch (_com_error *e)
 	{
@@ -691,30 +593,18 @@ void CTestDlg::OnButton12()
 }
 //DevID:设备主地址
 //Dev_id设备子地址
-unsigned char MENGsendToDtu(unsigned long DevID,unsigned char Dev_id, unsigned long money, unsigned long deyTime)
+unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime)
 {
 	int i = 0;// unsigned char mybuf[32];
 
 	unsigned long ttemp, ttemp1, ttemp2, ttemp3;
 	unsigned char ttemp189;
 	CString  tt1;
-	//	memset(MYbb, 0, 32);//发送前先清空接收缓冲区
 
-
-	//start run your function
-
-	//memset(mybuf, 11, 32);
 	OutputDebug("myTEST  MENGsendToDtu()  start..");
 
 	try
 	{
-		/*
-		ttemp189 = atol(tt1);
-		ttemp3 = atol(tt1);
-		GetDlgItemText(IDC_EDIT6, tt1);
-		float  ttemp88;
-		ttemp88 = atof(tt1); ttemp1 = ttemp88 * 100;
-		*/
 		myREVflag = 0;//判断什么时候接收到数据，就置1
 
 
@@ -743,27 +633,21 @@ unsigned char MENGsendToDtu(unsigned long DevID,unsigned char Dev_id, unsigned l
 
 void SendLoop()
 {
-	
+
 }//发送处理逻辑
 void  RevLoop()
 {
-	
+
 }//接收处理逻辑
 
 
 
-void CTestDlg::OnTimer(UINT nIDEvent) 
+void CTestDlg::OnTimer(UINT nIDEvent)
 {
 
 }
 
-
-
-
-
-
-
 void CAboutDlg::OnTimer(UINT_PTR nIDEvent)
 {
-	
+
 }

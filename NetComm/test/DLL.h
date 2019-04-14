@@ -7,7 +7,6 @@
 #include <vector>
 //引入头文件   
 #include "MD5/common.h"  
-extern void myOUTerr(unsigned char err);
 extern unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime);
 extern void SendBACKtoPHPserver(CString text);
 //发送到客户端列表显示
@@ -789,7 +788,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 					 Devent.Lock();
 					 SendBACKtoPHPserver(tt);
 					 Devent.UnLock();
-					 myOUTerr(0x31);
 					 //未超时的处理过程
 
 
@@ -872,7 +870,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 					 Devent.Lock();
 					 SendBACKtoPHPserver(tt);
 					 Devent.UnLock();
-					 myOUTerr(0x32);
 				 }
 				 if (MYbb[3] == 0x22) //机器完成使用后get请求：：
 				 {//http://zizhu.sdxjyjd.com/notify.php?machineid=1001&kk=消费金额&id=115347&md5val=kfwjeklx15151sdw23&time=201611130605&error=0
@@ -935,7 +932,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 								 SendBACKtoPHPserver(tt);
 							 }
 							 Devent.UnLock();
-							 myOUTerr(0x33);
 							 OutputDebug("myTEST  NetSendMyAccount()  000..nDut_ID=%d,nMeter_ID=%d", nDut_ID, nMeter_ID);
   #ifdef ConfirmJS
 							 if (nnMyEmpID != 0)//
@@ -999,7 +995,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 						 SendBACKtoPHPserver(tt);
 						 }
 						 Devent.UnLock();
-						 myOUTerr(0x33);
 						 OutputDebug("myTEST  NetSendMyAccount()  000..nDut_ID=%d,nMeter_ID=%d", nDut_ID, nMeter_ID);
    #ifdef ConfirmJS
 						 if (MyEmpID != 0)//
@@ -1061,7 +1056,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 						 Devent.Lock();
 						 SendBACKtoPHPserver(tt);
 						 Devent.UnLock();
-						 myOUTerr(0x33);
 						   
 				     }
               */
@@ -1086,7 +1080,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 						 Devent.Lock();
 						 SendBACKtoPHPserver(tt);
 						 Devent.UnLock();
-						 myOUTerr(0x33);
 					 }
 					 SqlOPP2.CloseSql();
 			   */
@@ -1131,7 +1124,6 @@ http://PHP后台接口文件（默认80端口）/api/?api_mod=common&extno=100&api_class=not
 					 Devent.Lock();
 					 SendBACKtoPHPserver(tt);
 					 Devent.UnLock();
-					 myOUTerr(0x32);
 				 }
 				 if (MYbb[3] == 0x09)  ////定时上传 8个以上参数  大约10分钟一次
 				 {

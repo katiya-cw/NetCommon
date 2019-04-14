@@ -34,58 +34,10 @@
     <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="HttpClient.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="httpserver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\my_alloc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\my_list.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\mysql.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\mysql_com.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\mysql_time.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\mysql_version.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mySqlINCHUDE\typelib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="test\DLL.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mur500_old.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\MUR500USB.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\my_alloc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\my_list.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mysql.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mysql_com.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mysql_time.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test\mysql_version.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="test\testDlg.h">
@@ -210,10 +162,5 @@
     <Image Include="res\NetComm.ico">
       <Filter>资源文件</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="test\MUR500USB.lib" />
-    <Library Include="test\WS2_32.LIB" />
-    <Library Include="test\libmysql.lib" />
   </ItemGroup>
 </Project>

@@ -28,7 +28,6 @@ int bmm;
 
 void updataSQL(int mm)
 {
-
 	DWORD dwRecvTime;//接收时间 
 	DWORD dwRecvTime2;
 	DWORD dwRecvTime3;
@@ -40,26 +39,10 @@ void updataSQL(int mm)
 
 													//CString s("2001-8-29 19:06:23");
 	int nYear, nMonth, nDate, nHour, nMin, nSec;
-	//sscanf(s, "%d-%d-%d %d:%d:%d", &nYear, &nMonth, &nDate, &nHour, &nMin, &nSec);
-	//CTime myT(nYear, nMonth, nDate, nHour, nMin, nSec);
-	//dwRecvTime2 = myT.GetTime();
-
-	//CString s1("2019-02-25 13:16:00.000");
-
-	//sscanf(s1, "%d-%d-%d %d:%d:%d", &nYear, &nMonth, &nDate, &nHour, &nMin, &nSec);
-	//CTime myT1(nYear, nMonth, nDate, nHour, nMin, nSec);
-	//dwRecvTime3 = myT1.GetTime();
-	//if (dwRecvTime >= dwRecvTime3)
-	//{
-	//	dwRecvTime2 = dwRecvTime - dwRecvTime3; //时间相差多少秒
-	//}
 	::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 	CDbOperate SqlOPP;
-	//	AfxMessageBox("0成功");
 	SqlOPP.OpenSql();
-	//	AfxMessageBox("1成功"); //ConnectDate
 	CString old_dwRecvTime;
-	// old_dwRecvTime= SqlOPP.MyQuerySQLconnectTime(7003);
 	SqlOPP.MyQuerySQLconnectTime();
 	map <DWORD, CString>::iterator it;
 	for (it = SqlOPP.devTimeMap.begin(); it != SqlOPP.devTimeMap.end(); ++it)
@@ -76,25 +59,18 @@ void updataSQL(int mm)
 
 		dwRecvTime3 = myT2.GetTime();
 		if (dwRecvTime >= dwRecvTime3)
-		 {
-		CJTime = dwRecvTime - dwRecvTime3;
-	     }
+		{
+			CJTime = dwRecvTime - dwRecvTime3;
+	    }
 		if (CJTime > 600)//10分钟 ,应该大于8分钟比较安全  但是在线的时候设备表现为掉线，不发07的命令，这点特别注意
 		{   
 			long pkkk = it->first;
-			//if (pkkk == 595)
-			//{
-			//	pkkk = 595;
-			//}
 			SqlOPP.UpdateSQLconnectTime(pkkk, 0);  //更新设备的联网状态	//掉线
 		}
-
 	}
 
 	SqlOPP.CloseSql();
 	::CoUninitialize();//反初始化COM库
-
-
 }
 #endif
 
@@ -127,15 +103,6 @@ unsigned __stdcall ServerWork(void *pInfo)
 {
 
 #ifdef updataOnOffDTU
-	//CDataBase* view;
-	//std::thread updateThread3([](CDataBase* view) {
-	//	while (true) {
-	//		view->LoadBaseTables2();
-	//		Sleep(5000);
-	//	}
-	//}, view);
-
-
 	std::thread mengThread2([](int bmm) {
 		while (true) {
 			updataSQL(bmm);
@@ -143,18 +110,10 @@ unsigned __stdcall ServerWork(void *pInfo)
 			Sleep(30000);
 		}
 	}, 3);
-	//while (1)
-	//{
-	// Sleep(60000);
-	//}
-
-
 #endif
 
-	//TREAD_INFO *p = (TREAD_INFO*)pInfo;
 	CHttpServer *server = (CHttpServer*)pInfo;
 
-	//server.Init(p->port,p->ip);
 	server->SetRecvCallBack(callback_OnServerRecv);
 	while (s_ServerRun)
 	{
@@ -173,8 +132,6 @@ unsigned __stdcall ClientWork(void* data) {
 	return 0;
 }
 // CNetCommDlg 对话框
-
-
 
 CNetCommDlg::CNetCommDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_NETCOMM_DIALOG, pParent)
@@ -226,18 +183,6 @@ BOOL CNetCommDlg::OnInitDialog()
 	CString hgg;
 	hgg.Format("http://127.0.0.1:%d?machineid=56&paymoney=6.0&id=115347&md5val=187c8207b32ee9eb37ccff8a9bf15b02&time=201611130605&blance=-1", httpRevUsePort);
 	((CEdit*)GetDlgItem(IDC_EDIT_URL))->SetWindowText(hgg);
-
-	//machineid = 56 & paymoney = 6.00&id = 115347 & md5val = kfwjeklx15151sdw23&time = 201611130605 & blance = -1
-	/*
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P1))->SetWindowText("xx1=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P2))->SetWindowText("xx2=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P3))->SetWindowText("xx3=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P4))->SetWindowText("xx4=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P5))->SetWindowText("xx5=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P6))->SetWindowText("xx6=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P7))->SetWindowText("xx7=3211111");
-	((CEdit*)GetDlgItem(IDC_EDIT_C_P8))->SetWindowText("xx8=3211111");
-	*/
 	
 	CRichEditCtrl *pEServer = ((CRichEditCtrl *)GetDlgItem(IDC_RICHEDIT_SERVER));
 	pEServer->SetWindowText("----------------服务端---------------");
@@ -249,32 +194,14 @@ BOOL CNetCommDlg::OnInitDialog()
 	((CIPAddressCtrl*)GetDlgItem(IDC_IPADDRESS))->SetAddress(dwIP);
 	CDeviceEvent::InitLock();
 
-
-
-
 //-----------------------启动HTTP服务---------START-------------
 
 	DWORD   dwExitCode;
 
-	//SetTimer(101, 200, NULL); //3秒1次
-							  //定时触发
-							  /*
-							  if (nIDEvent == 101)
-							  {		connectFlgNum++;
-							  if (connectFlgNum > 400) //于20分钟
-							  {			connectFlgNum = 0;
-							  }
-							  }
-							  */
-
-							  /**/
 	::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 	CDbOperate SqlOPP;
 	//	AfxMessageBox("0成功");
 	SqlOPP.OpenSql();
-	//	AfxMessageBox("1成功");
-
-	//SqlOPP.MyQuerySQL(23);
 #ifndef  updataOnOffDTU
 	//开始运行时设备都下线，
 	SqlOPP.myUpdateSQL(0);//开始运行是设备都下线，
@@ -283,22 +210,7 @@ BOOL CNetCommDlg::OnInitDialog()
 	SqlOPP.CloseSql();
 	::CoUninitialize();//反初始化COM库
 
-
-
-
-	//	AfxMessageBox("3成功");
-	/*
-	FILE* f = fopen("MYLOG.TXT", "a+");
-	char buff[30];
-	memset(buff, 0x33, 30);
-	fwrite(buff, 30, 1, f);
-	//	fread(buff, 30, 1, f);
-	fclose(f);
-	*/
 	g_hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	//OutputDebug2("版本 %d", g_nVer);
-	//	OutputDebug("编译版本时间 %s", GetBuildDateTime().Format("%Y-%m-%d %H:%M:%S"));
 
 	// TODO: 在此添加控件通知处理程序代码
 	if (s_ServerRun == false)
@@ -311,18 +223,12 @@ BOOL CNetCommDlg::OnInitDialog()
 		m_server.Init(m_threadInfo.port, m_threadInfo.ip);
 		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)&m_server, 0, 0);
 
-		//	GetExitCodeThread((HANDLE)hth1, &dwExitCode);
-		//_beginthreadex(NULL, 0, ServerWork, (void*)&m_threadInfo, 0, 0);
-
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("停止");
 	}
 	else
 	{
 		s_ServerRun = false;
 		m_server.Release();
-		//_endthreadex(hth1);
-		//TerminateThread(temp2);
-		//	CloseHandle(hth1);
 
 		Sleep(50);
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("启动");
@@ -335,8 +241,6 @@ BOOL CNetCommDlg::OnInitDialog()
 		m_dlg.Create(IDD_TEST_DIALOG, NULL);
 	}
 	m_dlg.ShowWindow(SW_SHOW);
-//----------------------
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -376,8 +280,6 @@ HCURSOR CNetCommDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-
 void CNetCommDlg::OnBnClickedClear()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -389,119 +291,26 @@ void CNetCommDlg::OnBnClickedClear()
 	pEURL->SetWindowText("");
 	Invalidate();
 }
-struct mystruct
-{
-	
-	char cha;
-	char end;
-	char end2;
-	char i;
-	char ii;
-};
-void myOUTerr(unsigned char err)
-{
-#ifdef myDebugTXT
-	OutputDebug("myTEST  myOUTerr()  start..");
 
-	FILE *stream;
-	unsigned char temp1, temp2;
-	//char buff[30];
-	struct mystruct s;
-	if ((stream = fopen("MYLOG.TXT", "a+")) == NULL) /* open file TEST.$$$ */
-	{
-		fprintf(stderr, "Cannot open output file.\n");
-		//	return 1;
-	}
-	//	fwrite(pch, "aaaa\r\n", 5, 1, fp);
-	//buff=
-//	fwrite("\r\n", 2, 1, stream); /* 换行*/
-	s.cha = 'E';
-	s.end = 'R';
-	s.end2 = 'R';
-	temp1 = ((err>>4) & 0x0f) + 0x30;
-	temp2= (err & 0x0f) + 0x30;
-	s.i =temp1;
-	s.ii = temp2;
-	fwrite(&s, sizeof(s), 1, stream); /* 写的struct文件*/
-	fclose(stream); /*关闭文件*/
-	OutputDebug("myTEST  myOUTerr()   end..");
-	//	return 0;
-#endif
-}
-void myOUTerrFirst(unsigned char err)
-{
-#ifdef myDebugTXT
-	FILE *stream;
-	unsigned char temp1, temp2;
-	//char buff[30];
-	struct mystruct s;
-	OutputDebug("myTEST  myOUTerrFirst()  start..");
-	if ((stream = fopen("MYLOG.TXT", "a+")) == NULL) /* open file TEST.$$$ */
-	{
-		fprintf(stderr, "Cannot open output file.\n");
-		//	return 1;
-	}
-	//	fwrite(pch, "aaaa\r\n", 5, 1, fp);
-	//buff=
-	fwrite("\r\n", 2, 1, stream); /* 换行*/
-	s.cha = 'E';
-	s.end = 'R';
-	s.end2 = 'R';
-	temp1 = ((err >> 4) & 0x0f) + 0x30;
-	temp2 = (err & 0x0f) + 0x30;
-	s.i = temp1;
-	s.ii = temp2;
-	fwrite(&s, sizeof(s), 1, stream); /* 写的struct文件*/
-	fclose(stream); /*关闭文件*/
-	OutputDebug("myTEST  myOUTerrFirst()   end..");				//	return 0;
-#endif
-}
 void CNetCommDlg::OnBnClickedStart()
 {  
-	//myOUTerr(0x97);
-	myOUTerrFirst(0x00);//开机换行时用
-	
 	OutputServerString("显示接收到PHP服务器请求的内容:\n");
 	OutputClientString("显示发回给PHP服务器的内容:\n");
 	DWORD   dwExitCode;
 
-//	SetTimer(101,200, NULL); //3秒1次
-	//定时触发
-	/*
-	if (nIDEvent == 101)
-	{		connectFlgNum++;
-		if (connectFlgNum > 400) //于20分钟
-		{			connectFlgNum = 0;
-		}
-	}
-	*/
-
-/**/
 	::CoInitialize(NULL);//初始化COM库 线程内读写SQL必须初始化和反初始化，否则经常出现SQL读写错误
 	CDbOperate SqlOPP;
-	//	AfxMessageBox("0成功");
 	SqlOPP.OpenSql();
-	//	AfxMessageBox("1成功");
-
-	//SqlOPP.MyQuerySQL(23);
 
 	//开始运行时设备都下线，
 	SqlOPP.myUpdateSQL(0);//开始运行是设备都下线，
 						  //	AfxMessageBox("2成功");
 	SqlOPP.CloseSql();
 	::CoUninitialize();//反初始化COM库
-//	AfxMessageBox("3成功");
-/*
-	FILE* f = fopen("MYLOG.TXT", "a+");
-	char buff[30];
-	memset(buff, 0x33, 30);
-	fwrite(buff, 30, 1, f);
-//	fread(buff, 30, 1, f);
-	fclose(f);
-*/
-		g_hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	g_hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		
-		OutputDebug2("版本 %d", g_nVer);
+	OutputDebug2("版本 %d", g_nVer);
 	//	OutputDebug("编译版本时间 %s", GetBuildDateTime().Format("%Y-%m-%d %H:%M:%S"));
 	
 	// TODO: 在此添加控件通知处理程序代码
@@ -514,19 +323,13 @@ void CNetCommDlg::OnBnClickedStart()
 		m_threadInfo.port = httpRevUsePort;
 		m_server.Init(m_threadInfo.port, m_threadInfo.ip);
 		hth1 = _beginthreadex(NULL, 0, ServerWork, (void*)&m_server, 0, 0);
-		
-	//	GetExitCodeThread((HANDLE)hth1, &dwExitCode);
-	    //_beginthreadex(NULL, 0, ServerWork, (void*)&m_threadInfo, 0, 0);
-
+	
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("停止");
 	}
 	else
 	{
 		s_ServerRun = false;
 		m_server.Release();
-		//_endthreadex(hth1);
-		//TerminateThread(temp2);
-	//	CloseHandle(hth1);
 
 		Sleep(50);
 		((CButton*)GetDlgItem(IDC_START))->SetWindowText("启动");
@@ -543,6 +346,7 @@ LRESULT CNetCommDlg::OnServerInfoMsg(WPARAM wparam, LPARAM lparam)
 	Invalidate();
 	return NULL;
 }
+
 //处理消息显示
 LRESULT CNetCommDlg::OnClientInfoMsg(WPARAM wparam, LPARAM lparam)
 {
@@ -584,9 +388,8 @@ void CNetCommDlg::OnBnClickedButtonSend()
 	memset(buf, 0, text.GetLength() + 1);
 	memcpy(buf, text.GetBuffer(), text.GetLength());
 	_beginthreadex(NULL, 0, ClientWork, (void*)buf, 0, 0);
-
-	//OutputClientString(ret);
 }
+
 void SendBACKtoPHPserver(CString text)
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -594,6 +397,7 @@ void SendBACKtoPHPserver(CString text)
 	std::string ret = CHttpClientManager::getInstance()->request(text.GetBuffer());
 //	OutputClientString(ret);
 }
+
 //显示服务器参数
 void CNetCommDlg::ShowServerParam(CString param)
 {
@@ -612,6 +416,7 @@ void CNetCommDlg::ShowServerParam(CString param)
 		i++;
 	}
 }
+
 //获取客户输入参数
 CString CNetCommDlg::GetClientParam()
 {
@@ -637,49 +442,12 @@ CString CNetCommDlg::GetClientParam()
 
 void CNetCommDlg::OnBnClickedButtonTest()
 {
-
-	
-
 	CDbOperate SqlOPP;
 	SqlOPP.OpenSql();
 	//临时先假定设备都上线，把链接状态都改为上线状态
-//	SqlOPP.my2UpdateSQL(8, 1);//假设设备都上线，
-//	SqlOPP.CloseSql();
-//	SqlOPP.InsertSQLPayRecord(1, 79);
-/*
-	if (SqlOPP.MyQuerySQL(9) == 1)
-	{
-		SqlOPP.UpdateSQL(9, 9);//
-	}
-/*
-	else
-	{
-		SqlOPP.InsertSQLPayRecord(9, 7777);
-	}
-*/
-	//临时先假定设备都上线，把链接状态都改为上线状态
-//	SqlOPP.myUpdateSQL(1);//假设设备都上线，
-
-	//SqlOPP.MyQuerySQL(23); AfxMessageBox("2成功");
-//	SqlOPP.MyQuerySQL(245); AfxMessageBox("3成功");
-	//SqlOPP.MyQuerySQL(213); AfxMessageBox("4成功");
-//	SqlOPP.MyQuerySQL(23);
 
 	SqlOPP.CloseSql();
 	
-
-	//测试读写数据库SQLSERVER2008
-
-	// TODO: 在此添加控件通知处理程序代码
-/*
-	CDeviceEvent Devent;
-	HANDLE hEvent = Devent.GetEvent(6);
-	if (hEvent != NULL)
-	{
-		SetEvent(hEvent);
-	}
-*/
-
 	if (!::IsWindow(m_dlg.m_hWnd))
 	{
 		m_dlg.Create(IDD_TEST_DIALOG, NULL);
@@ -687,7 +455,6 @@ void CNetCommDlg::OnBnClickedButtonTest()
 	m_dlg.ShowWindow(SW_SHOW);
 	
 }
-
 
 void CNetCommDlg::OnTimer(UINT_PTR nIDEvent)
 {
@@ -703,14 +470,6 @@ void CNetCommDlg::OnTimer(UINT_PTR nIDEvent)
 			CDbOperate SqlOPP;
 			SqlOPP.OpenSql();
 
-			//开始运行时设备都下线，
-			//	SqlOPP.myUpdateSQL(1);//开始运行是设备都下线，
-
-			//	SqlOPP.CloseSql();	// TODO: 在此添加控件通知处理程序代码
-			//	SqlOPP.MyQuerySQL(23);
-
-		//	AfxMessageBox("100成功");
-
 			if (SqlOPP.MyQuerySQL(myDTU_ID) == 1)
 			{
 				//		AfxMessageBox("1成功");
@@ -718,21 +477,15 @@ void CNetCommDlg::OnTimer(UINT_PTR nIDEvent)
 			}
 			else
 			{
-				//		AfxMessageBox("2成功");
 				SqlOPP.InsertSQLPayRecord(myDTU_ID, myID);
 			}
-			//	AfxMessageBox("3成功");
 			SqlOPP.CloseSql();
-			//	AfxMessageBox("4成功");
-
 		}
 		if (SQLwriteFlag2 == 1)
 		{
 			SQLwriteFlag2 = 0;
 			CDbOperate SqlOPP;
 			SqlOPP.OpenSql();
-			//临时先假定设备都上线，把链接状态都改为上线状态
-		//	AfxMessageBox("200成功");
 			if (SqlOPP.MyQuerySQL(myDTU_ID2) == 1)
 			{
 				//		AfxMessageBox("1成功");
@@ -771,9 +524,6 @@ void CNetCommDlg::OnTimer(UINT_PTR nIDEvent)
 		if (connectFlgNum > 400) //于20分钟
 		{
 			connectFlgNum = 0;
-           
-
-
 		}
 	}
 	OutputDebug("myTEST  CNetCommDlg::OnTimer  end..");
@@ -789,17 +539,12 @@ void CNetCommDlg::OnBnClickedStart2()
 	SqlOPP.myUpdateSQL(0);//开始运行是设备都下线，
 
 	SqlOPP.CloseSql();
-
 }
 
 
 void CNetCommDlg::OnBnClickedStart3()
 {
 	CString str; CString getTIME;
-//	CString strSQL;
-//	COleDateTime dt = COleDateTime::GetCurrentTime();
-
-//	strSQL.Format("INSERT INTO stuTable(birth) VALUES('%s')", dt.Format("%Y-%m-%d %H:%M:%S"));
 	extern CString gettime2();
 	unsigned int bb[8];
 	int dtu_id = 0;
@@ -824,8 +569,6 @@ void CNetCommDlg::OnBnClickedStart3()
 	CString test_str1 = "低液位";
 	tt1 += URLEncode(test_str1);
 	
-
-
 	str.Format("%f", tem3);
 	CString tt = "http://zizhu.sdxjyjd.com/notify.php";
 //	OutputClientString(tt);
@@ -848,13 +591,11 @@ void CNetCommDlg::OnBnClickedStart3()
 	bb[0] = 0x0203;
 	SqlOPP.my3UpdateSQL(56, bb);//
 
-
-
 	if (SqlOPP.MyQuerySQL2(53) == 1)
 	{ }
 	else
 	{
-				SqlOPP.InsertSQLPayRecord2(53);//如果没有该设备就通过定时包来添加该设备
+		SqlOPP.InsertSQLPayRecord2(53);//如果没有该设备就通过定时包来添加该设备
 	}
 	SqlOPP.my3UpdateSQL(53, bb);//
 //	SqlOPP.my3UpdateSQL(56, bb);
