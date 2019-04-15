@@ -316,10 +316,7 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 			{
 				SqlOPP2.InsertSQLPayRecordCCC(mynDut_ID, 1);//提示设备有人在用
 			}
-#endif				 
-			//	AfxMessageBox("3成功");
-
-
+#endif		
 		}
 
 
@@ -338,8 +335,6 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 		{
 			SqlOPP2.InsertSQLPayRecordCCC(mynDut_ID, mLtemp);//写入哪路在用，哪路为空
 		}
-
-
 #endif
 
 #endif					
@@ -392,13 +387,8 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 			{
 
 			}
-
 		}
-
-
 #endif
-
-
 	}
 	if (MYbb[3] == 0x06) //判断是卡号，10位BCD码，当控制码是06时代表的含义是上传卡号：
 	{
@@ -433,12 +423,7 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 		tt += "&time=";
 		tt = tt + getTIME;
 		OutputClientString(tt);//发给发送窗口作为提示
-		Devent.Lock();
 		SendBACKtoPHPserver(tt);
-		Devent.UnLock();
-		//未超时的处理过程
-
-
 	}
 	if (MYbb[3] == 0x55) //判断是手机号，11位BCD码，当控制码是55时代表的含义是上传手机号：
 	{//http://zizhu.sdxjyjd.com/phonecode.php?machineid=1001&phone=6&pwd=6612151&md5val=kfwjeklx15151sdw23&time=201611130605
@@ -485,9 +470,7 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 		tt += "&time=";
 		tt = tt + getTIME;
 		OutputClientString(tt);//发给发送窗口作为提示
-		Devent.Lock();
 		SendBACKtoPHPserver(tt);
-		Devent.UnLock();
 	}
 	if (MYbb[3] == 0x22) //机器完成使用后get请求：：
 	{//http://zizhu.sdxjyjd.com/notify.php?machineid=1001&kk=消费金额&id=115347&md5val=kfwjeklx15151sdw23&time=201611130605&error=0
@@ -544,12 +527,10 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 
 					OutputClientString(tt);//发给发送窗口作为提示
 				}
-				Devent.Lock();
 				if (nnMyEmpID != 0)//只有会员才发结算命令
 				{
 					SendBACKtoPHPserver(tt);
 				}
-				Devent.UnLock();
 				OutputDebug("myTEST  NetSendMyAccount()  000..nDut_ID=%d,nMeter_ID=%d", nDut_ID, nMeter_ID);
 #ifdef ConfirmJS
 				if (nnMyEmpID != 0)//
@@ -607,12 +588,10 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 
 				OutputClientString(tt);//发给发送窗口作为提示
 			}
-			Devent.Lock();
 			if (MyEmpID != 0)//只有会员才发结算命令
 			{
 				SendBACKtoPHPserver(tt);
 			}
-			Devent.UnLock();
 			OutputDebug("myTEST  NetSendMyAccount()  000..nDut_ID=%d,nMeter_ID=%d", nDut_ID, nMeter_ID);
 #ifdef ConfirmJS
 			if (MyEmpID != 0)//
@@ -688,9 +667,7 @@ bool callBack_GetDataFunction(int nDut_ID, int nMeter_ID, int nType, long tCommn
 		tt += "&time=";
 		tt = tt + getTIME;
 		OutputClientString(tt);//发给发送窗口作为提示
-		Devent.Lock();
 		SendBACKtoPHPserver(tt);
-		Devent.UnLock();
 	}
 	if (MYbb[3] == 0x09)  ////定时上传 8个以上参数  大约10分钟一次
 	{
