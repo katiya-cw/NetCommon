@@ -8,6 +8,7 @@
 //引入头文件   
 #include "MD5/common.h"  
 #include "Utils/Utils.h"
+#include "Utils/NetClient.h"
 
 extern unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime);
 extern void SendBACKtoPHPserver(CString text);

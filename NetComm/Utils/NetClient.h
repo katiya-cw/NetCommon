@@ -96,3 +96,6 @@ UINT ______AFX_DOWN_LOAD(LPVOID pParam);
 UINT ______AFX_CHECK_METER(LPVOID pParam);
 int tcpreceive(SOCKET s, char *pchbuf, int nsize, int ntimeoverSec);
 unsigned char MENGsendToDtu(unsigned long DevID, unsigned char Dev_id, unsigned long money, unsigned long deyTime);
+
+int NetSendMyAccount(int DtuID, unsigned char nMeter_ID, int OKorNO);
+int MENGsendDown_Data(int DtuID, unsigned char nMeter_ID, unsigned int* Down_Data, unsigned char ttm);

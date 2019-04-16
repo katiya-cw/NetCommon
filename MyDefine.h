@@ -73,16 +73,6 @@ select value from  master.dbo.sysconfigures where [config]=103
 
 
 
-///////////////////////////////////////////////////////////
-//
-//
-//////////////////////////////////////////////////////////
-extern int pascal NetSendMyAccount(int DtuID, unsigned char nMeter_ID, int OKorNO);//对自助设备发送结算确认命令
-extern  int pascal MENGsendDown_Data(int DtuID, unsigned char nMeter_ID, unsigned int* Down_Data, unsigned char ttm);
-//extern unsigned int CheckBox[2];
-
-
-
 
 
 

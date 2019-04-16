@@ -77,7 +77,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\vcpkg\installed\x64-windows-static\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\vcpkg\installed\x86-windows-static\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vcpkg\installed\x86-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
