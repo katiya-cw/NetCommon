@@ -52,9 +52,6 @@
     <ClInclude Include="..\MyDefine.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="LogUtil\easylogging++.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Http\EventLoopManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -138,9 +135,6 @@
     <ClCompile Include="MD5\common.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LogUtil\easylogging++.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="TcpServer\ConnectManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -175,6 +169,7 @@
     <None Include="res\NetComm.rc2">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="待优化.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\NetComm.ico">

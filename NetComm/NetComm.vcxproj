@@ -207,7 +207,6 @@
     <ClInclude Include="Http\EvppHttpClientManager.h" />
     <ClInclude Include="Http\EvppHttpServer.h" />
     <ClInclude Include="Http\NetCommHttpServerInstance.h" />
-    <ClInclude Include="LogUtil\easylogging++.h" />
     <ClInclude Include="MD5\common.h" />
     <ClInclude Include="NetComm.h" />
     <ClInclude Include="NetCommDlg.h" />
@@ -235,7 +234,6 @@
     <ClCompile Include="DialogReg.cpp" />
     <ClCompile Include="Http\EvppHttpClient.cpp" />
     <ClCompile Include="Http\EvppHttpServer.cpp" />
-    <ClCompile Include="LogUtil\easylogging++.cpp" />
     <ClCompile Include="MD5\common.cpp" />
     <ClCompile Include="NetComm.cpp" />
     <ClCompile Include="NetCommDlg.cpp" />
@@ -261,6 +259,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\NetComm.rc2" />
+    <None Include="待优化.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\NetComm.ico" />

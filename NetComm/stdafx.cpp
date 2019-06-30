@@ -4,10 +4,7 @@
 // stdafx.obj 将包含预编译类型信息
 
 #include "stdafx.h"
-
-#define ELPP_NO_DEFAULT_LOG_FILE
-#include "LogUtil\easylogging++.h"
-INITIALIZE_EASYLOGGINGPP;
+#include "evpp\logging.h"
 
 extern HANDLE g_hOut;
 
@@ -15,7 +12,6 @@ void OutputDebug(const char * fmt, ...)
 {
     char szData[512]={0};
 	
-#ifdef WIN32	
     char data[512]={0};
     va_list args;
 	va_start(args, fmt);
@@ -26,25 +22,11 @@ void OutputDebug(const char * fmt, ...)
 	GetLocalTime(&sys);
 	
 	sprintf_s(data,"%02d:%02d:%02d %s\n",sys.wHour,sys.wMinute,sys.wSecond,szData);
-	LOG(INFO) << data;
+	LOG_INFO << data;
 	OutputDebugString(data);
-#else
-    va_list args;
-    int n;
-    va_start(args, fmt);
-    n = vsprintf(szData, fmt, args);
-    va_end(args);
-	
-	time_t now = time(0);
-	tm *tnow = localtime(&now);
-	
-	printf("%02d:%02d:%02d %s\n",tnow->tm_hour,tnow->tm_min,tnow->tm_sec,szData);
-#endif
 }
 void OutputDebug2(const char * fmt, ...)
 {
-	
-
 	char szData[512] = { 0 };
 	char data[512] = { 0 };
 	memset(data, 0, sizeof(data));
@@ -60,11 +42,7 @@ void OutputDebug2(const char * fmt, ...)
 	sprintf(data, "%s %s\n", CTime::GetCurrentTime().Format("%H:%M:%S"), szData);
 	//sys.wMinute,
 	OutputDebugString(data);
-	LOG(INFO) << data;
-	//if (g_hOut != 0)
-	{
-		_tprintf(_T("%s"), data);
-	}
+	LOG_INFO << data;
 }
 //发送到服务端列表显示
 void OutputServerString(CString str)

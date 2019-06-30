@@ -11,7 +11,6 @@
 #include "db/DbOperate.h""
 #include "../MyDefine.h"
 #include "ThreadPool.h"
-#include "LogUtil/easylogging++.h"
 #include "Http/EvppHttpClientManager.h"
 #include "Http/NetCommHttpServerInstance.h"
 #include "Utils/Utils.h"
@@ -155,7 +154,9 @@ END_MESSAGE_MAP()
 BOOL CNetCommDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-	el::Loggers::configureFromGlobal("log.conf");
+	google::InitGoogleLogging("NetComm");
+	google::SetLogDestination(google::GLOG_INFO, "log/info_");
+
 	CString startLog = "The program has started.";
 
 	// 设置此对话框的图标。  当应用程序主窗口不是对话框时，框架将自动
